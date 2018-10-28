@@ -27,7 +27,7 @@ function buildStages(){
   })
 
   deployButton.classList.add("deploy-btn", "btn" ,"UI" ,"display-none")
-  deployButton.textContent = "Deploy"
+  deployButton.textContent = "Deploys"
   game.div.appendChild(deployButton);
   deployButton.addEventListener("click",function(){
     if (stages[0].hasChildNodes() || stages[1].hasChildNodes()){
