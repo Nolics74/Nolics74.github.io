@@ -81,7 +81,8 @@ const game = (() => {
   const div = document.getElementById('game');
   const bottomPassButton = document.getElementById("pass-btn-bottom");
   const topPassButton = document.getElementById("pass-btn-top");
-  let players = [player("Radiant",["Keefe the Bold","Fahrvhan the Dreamer","J\'Muy the Wise","Debbi the Cunning","Crystal Maiden"]),
+  //let players = [player("Radiant",["Keefe the Bold","Fahrvhan the Dreamer","J\'Muy the Wise","Debbi the Cunning","Crystal Maiden"]),
+ let players = [player("Radiant",["Axe","Fahrvhan the Dreamer","J\'Muy the Wise","Debbi the Cunning","Crystal Maiden"]),
                  player("Dire",["Keefe the Bold","Fahrvhan the Dreamer","J\'Muy the Wise","Debbi the Cunning","Crystal Maiden"],true)];
   let turn = 0;
   let round = 0;
