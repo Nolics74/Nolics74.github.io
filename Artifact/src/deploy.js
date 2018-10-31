@@ -1,7 +1,9 @@
 import passButtonController from './passButtonController'
-import {game , board, cardData, posAvail} from './index.js'
+import handController from './handController'
+import {game , cardData, posAvail} from './index.js'
+import {board} from './board'
 import {card , blank, draggedCard} from './card'
-import shuffle from './shuffle'
+import {shuffle} from './arrayFunctions'
 
 
 const stages = [];
@@ -27,7 +29,7 @@ function buildStages(){
   })
 
   deployButton.classList.add("deploy-btn", "btn" ,"UI" ,"display-none")
-  deployButton.textContent = "Deplo"
+  deployButton.textContent = "Deploy"
   game.div.appendChild(deployButton);
   deployButton.addEventListener("click",function(){
     if (stages[0].hasChildNodes() || stages[1].hasChildNodes()){
@@ -110,7 +112,6 @@ function deployment(){
       })
     })
     deployButton.classList.remove('display-none')
-    // deploy();
   }();
 }
 
@@ -118,44 +119,27 @@ function deploy(){
 
   hideStages()
   deployButton.classList.add('display-none')
-  for (let i = 0; i < 3; i++){
+  for (let i = 0; i < 3; i++){ // makes blank rows in nessesrry
     let lane = board.lanes[i]
-    sides.forEach(function(side, sideIndex){
-      while (lane.cards.reduce(posAvail , [[],[]])[sideIndex].length < side[i].length){
-        let rightLeft = Math.random() < 0.5
-        let empty = [blank(lane.playAreas[0],rightLeft),blank(lane.playAreas[1],rightLeft)]
-        rightLeft ? lane.cards.push(empty) : lane.cards.unshift(empty)
-      }
-    })
-    sides.forEach(function(side, sideIndex){
-      side[i].forEach(function(creep){
-        let pos = lane.cards.reduce(posAvail , [[],[]])[sideIndex]
-        pos = pos[Math.floor(Math.random() * pos.length)]
-        let blankDiv = lane.cards[pos][sideIndex].div
-        blankDiv.parentNode.replaceChild(creep.div , blankDiv)
-        lane.cards[pos][sideIndex] = creep
-      })
-    })
-  }
-  board.lanes.forEach(function(lane){
-    if (game.getRound() != 0){
+    lane.summon([sides[0][i],sides[1][i]],false)
+
+    if (game.getRound() != 0){  // sets the arrows
       lane.cards.forEach(function(row,index){
         row.forEach(function(unit, side) {
           if(unit.Name != null){
-            if(row[1 - side].Name == null){
-              let rand = Math.random();
-              rand = rand > .75 ? 1 : (rand > .25) - 1;
-              if (lane.cards[index + rand] == null || lane.cards[index + rand][1 - side].Name == null){ rand = 0 }
-              unit.arrow = rand;
-            }
-            unit.updateDisplay()
+            unit.rndArrow(lane,index,side)
           }
         })
       })
     }
-    console.log(lane.cards)
-  })
+  }
+  game.dispatchEvent("continuousRefresh");
+  game.players.forEach(function(player){player.draw();player.draw()})
+  game.nextTurn();
+  game.dispatchEvent("beforeTheActionPhase")
   passButtonController.show();
+  handController.show();
+  // handController.enable();
 }
 
 
