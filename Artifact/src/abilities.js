@@ -25,7 +25,8 @@ abilityMap.set("Pack Leadership" , function(card,e){
 
 triggerMap.set("Wisdom of the Elders" , "click")
 abilityMap.set("Wisdom of the Elders" , function(card,e){
-  console.log("Wisdom of the Elders")
+  card.player.draw();card.player.draw()
+  return true
 });
 
 triggerMap.set("Work the Knife" , "whenAttacking")
@@ -64,5 +65,10 @@ abilityMap.set("Burning Oil : Effect" , function(card,e){
 });
 
 //// creeps
+
+triggerMap.set("Troll Soothsayer : Effect" , "endOfRound")
+abilityMap.set("Troll Soothsayer : Effect" , function(card,e){
+  card.player.draw()
+});
 
 export {abilityMap,triggerMap};

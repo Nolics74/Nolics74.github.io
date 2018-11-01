@@ -1,25 +1,65 @@
 {
-  "name": "artifact",
-  "version": "1.0.0",
-  "description": "",
-  "private": true,
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack --mode development",
-    "build": "webpack",
-    "watch": "webpack --progress --watch",
-    "server": "webpack-dev-server --open"
+  "_from": "artifactdb@2.2.3",
+  "_id": "artifactdb@2.2.3",
+  "_inBundle": false,
+  "_integrity": "sha512-sz6Y+HpCUo92GprRXreJxOtwl0Lu/AaC3iLUB3zbUb2woAAQ6wpyXEeFsDwgu12cry9TYzzpnmvvwwsBenOkkw==",
+  "_location": "/artifactdb",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "artifactdb@2.2.3",
+    "name": "artifactdb",
+    "escapedName": "artifactdb",
+    "rawSpec": "2.2.3",
+    "saveSpec": null,
+    "fetchSpec": "2.2.3"
   },
-  "author": "Max Garber",
-  "license": "ISC",
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/artifactdb/-/artifactdb-2.2.3.tgz",
+  "_shasum": "c1f5c87339bc2ca38f225bf3e47e06516f454dca",
+  "_spec": "artifactdb@2.2.3",
+  "_where": "/home/max/the_odin_project/Artifact",
+  "author": {
+    "name": "Theo Ottah"
+  },
+  "bugs": {
+    "url": "https://github.com/ottah/ArtifactDB/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {},
+  "deprecated": false,
+  "description": "Repository of Artifact cards & artwork by Valve.",
   "devDependencies": {
-    "uglifyjs-webpack-plugin": "^2.0.1",
-    "webpack": "^4.23.1",
-    "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.9"
+    "eslint": "^5.7.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "jsonfile": "^5.0.0",
+    "pre-commit": "^1.2.2"
   },
-  "dependencies": {
-    "artifactdb": "^2.2.2"
-  }
+  "homepage": "https://github.com/ottah/ArtifactDB#readme",
+  "keywords": [
+    "artifact",
+    "valve",
+    "card",
+    "game"
+  ],
+  "license": "ISC",
+  "main": "index.js",
+  "name": "artifactdb",
+  "pre-commit": [
+    "test"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ottah/ArtifactDB.git"
+  },
+  "scripts": {
+    "build": "node ci/build.js cards-manifest.json && exit 0",
+    "test": "jsonlint cards-manifest.json -q -c"
+  },
+  "version": "2.2.3"
 }
