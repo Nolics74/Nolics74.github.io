@@ -387,8 +387,8 @@ effectMap.set("Assassinate" , function(ev, lane, player, index){
   return true
 });
 
+
 //"Grazing Shot","No Accident","Slay","Pick Off","Assassinate"
-["Mana Drain","Payday","Arcane Censure"]
 
 
 export {effectMap,targetMap};

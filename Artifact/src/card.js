@@ -82,7 +82,12 @@ const card = (cardProto , player) => {
   artwork.src = `${assetPath}/artwork/large/${cardProto.fileName}.jpg`
   div.appendChild(artwork)
 
-  function lane(){ return board.lanes.findIndex(function(l){ return l.cards.flat().some(function(c){return c.div == cardProto.div }) })}
+  function lane(){
+    if (cardProto.CardType == "Improvement"){
+      return board.lanes.findIndex(function(l){ return l.improvements.flat().some(function(c){return c.div == cardProto.div }) })
+    }
+    else return board.lanes.findIndex(function(l){ return l.cards.flat().some(function(c){return c.div == cardProto.div }) })
+  }
 
   if (cardProto.CardType == "Hero"){
     properties.respawn = 0;
@@ -213,11 +218,13 @@ const card = (cardProto , player) => {
         ability.cooldownDiv.textContent = ability.currentCooldown;
         ability.div.appendChild(ability.cooldownDiv)
         ability.div.addEventListener("click", function(e){
-
           if (game.players[game.getTurn()] == player && game.getCurrentLane() == lane() && cardProto.Abilities[abilityIndex].currentCooldown <= 0){
-            if (abilityMap.get(ability.Name)(cardProto,e)) { cardProto.Abilities[abilityIndex].currentCooldown = cardProto.Abilities[abilityIndex].Cooldown ; updateDisplay()}
+            if (abilityMap.get(ability.Name)(cardProto,e)) {
+              cardProto.Abilities[abilityIndex].currentCooldown = cardProto.Abilities[abilityIndex].Cooldown;
+              updateDisplay()
+              game.nextTurn()
+            };
           }
-
         })
         endOfRound = addToFunction(endOfRound , function(){cardProto.Abilities[abilityIndex].currentCooldown -= 1;})
         updateDisplay = addToFunction(updateDisplay , function(){

@@ -4,6 +4,10 @@ import {colorCheck , draggedCard} from './card'
 import {sum, shuffle} from './arrayFunctions'
 import {targetMap} from './cardEffects.js'
 
+const lastPlayed = document.getElementById("last-played-top");
+let lastCard = document.createElement('div');
+lastPlayed.appendChild(lastCard);
+
 function targetUnitsAvail(total, position, index) {
   if (position[0].Name != null){
     total[0].push(index)
@@ -32,12 +36,20 @@ function targetCreepsAvail(total, position, index) {
   return total
 }
 
+let targetEnemy = ["Intimidation","Bellow","Relentless Pursuit","Viscous Nasal Goo","Crippling Blow","Rend Armor","Grazing Shot","No Accident","Slay","Pick Off","Assassinate"]
+targetEnemy = new Map(targetEnemy.map(x => [x,true]))
+
+let targetCreeps = ["Slay","Bellow"]
+targetCreeps = new Map(targetCreeps.map(x => [x,true]))
+
+
 const AI = (() => {
   const actionPhase = (player) => {
     shuffle(player.hand)
+    let card;
     played:
     for (var i = 0; i < player.hand.length; i++) {
-      let card = player.hand[i]
+      card = player.hand[i]
       if ((card.ManaCost||0) <= board.lanes[game.getCurrentLane()].towers[player.turn].mana[0]) {
         card.div.ondragstart(new DragEvent({setData:null}))
         if (board.lanes[game.getCurrentLane()].cards.some(colorCheck)){
@@ -67,8 +79,10 @@ const AI = (() => {
             if (spellTarget == "lane"){
               spellTarget = lane
             } else if (spellTarget == "unit") {
-              let targetPlayer = true ? player.turn : 1 - player.turn                                                     // make map of cards for AI to use
-              spellTarget = lane.cards.reduce(targetHerossAvail , [[],[]])[targetPlayer]                                // prob another map, or use the targetMap
+              let targetPlayer = targetEnemy.get(card.Name) ? 1 - player.turn : player.turn
+              if (targetCreeps.get(card.Name)){spellTarget = lane.cards.reduce(targetCreepsAvail , [[],[]])[targetPlayer]}
+              else {spellTarget = lane.cards.reduce(targetHerossAvail , [[],[]])[targetPlayer]}
+
               if (spellTarget.length <= 0 ) break played;
               spellTarget = lane.cards[spellTarget[Math.floor(Math.random() * spellTarget.length)]][targetPlayer]
             }
@@ -84,6 +98,11 @@ const AI = (() => {
           break played;
         }
       }
+    }
+    if (game.getTurn() != player.turn){
+      card = card.div.cloneNode(true)
+      lastCard.parentNode.replaceChild(card, lastCard)
+      lastCard = card
     }
     setTimeout( function(){if (game.getTurn() == player.turn) game.pass() } , 300)
     // setTimeout( game.pass , 300)

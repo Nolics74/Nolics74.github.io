@@ -15,6 +15,8 @@ loadJSON(function(response){
   cardData = JSON.parse(response).Sets[0]
 });
 
+
+
 // const blank = (parrent, side) => {
 // function addToFunction( someFunction , callback){
 // const card = (cardProto) => {
@@ -102,13 +104,13 @@ const game = (() => {
   const div = document.getElementById('game');
   // const bottomPassButton = document.getElementById("pass-btn-bottom");
   // const topPassButton = document.getElementById("pass-btn-top");
-  let deck = ["Legion Standard Bearer","Mercenary Exiles","Verdant Refuge","Mist of Avernus","Ignite","Assault Ladders","Mana Drain","Payday","Arcane Censure","Stars Align","Bellow","Rumusque Blessing","Defensive Bloom","Restoration Effort","Intimidation","Curse of Atrophy","Strafing Run","Lightning Strike","Rolling Storm","Tower Barrage","Foresight","Prey on the Weak","Remote Detonation","Thunderstorm","Bolt of Damocles","Poised to Strike","Defensive Stance","Enrage","God's Strength","Spring the Trap","Double Edge","Conflagration","Call the Reserves", "Better Late Than Never","Iron Branch Protection","Avernus' Blessing","Dimensional Portal","Bronze Legionnaire","Marrowfell Brawler","Ogre Conscript","Troll Soothsayer","Untested Grunt","Thunderhide Alpha"]
+  let deck = ["Steam Cannon","Grazing Shot","No Accident","Slay","Pick Off","Selfish Cleric","Revtel Convoy","Ravenous Mass","Rampaging Hellbear","Satyr Duelist","Savage Wolf","Satyr Magician","Disciple of Nevermore","Legion Standard Bearer","Mercenary Exiles","Verdant Refuge","Mist of Avernus","Ignite","Assault Ladders","Mana Drain","Payday","Arcane Censure","Stars Align","Bellow","Rumusque Blessing","Defensive Bloom","Restoration Effort","Intimidation","Curse of Atrophy","Strafing Run","Lightning Strike","Rolling Storm","Tower Barrage","Foresight","Prey on the Weak","Remote Detonation","Thunderstorm","Bolt of Damocles","Poised to Strike","Defensive Stance","Enrage","God's Strength","Spring the Trap","Double Edge","Conflagration","Call the Reserves", "Better Late Than Never","Iron Branch Protection","Avernus' Blessing","Dimensional Portal","Bronze Legionnaire","Marrowfell Brawler","Ogre Conscript","Troll Soothsayer","Untested Grunt","Thunderhide Alpha"]
   deck = deck.concat(deck,deck)
   let players = [player(0,"Radiant",
-                    ["Keefe the Bold","Fahrvhan the Dreamer","J\'Muy the Wise","Debbi the Cunning","Axe"],
+                    ["Debbi the Cunning","Keefe the Bold","Fahrvhan the Dreamer","J\'Muy the Wise","Axe"],
                     deck.slice()),
                  player(1,"Dire",
-                    ["Keefe the Bold","Fahrvhan the Dreamer","J\'Muy the Wise","Debbi the Cunning","Axe"],
+                    ["Debbi the Cunning","Keefe the Bold","Fahrvhan the Dreamer","J\'Muy the Wise","Axe"],
                     deck,
                     true)];
   let turn = Math.random() < 0.5;
@@ -143,11 +145,11 @@ const game = (() => {
     if ( score[0] < 2 && score[1] < 2){
       return false;
     }else if ( score[0] >= 2 && score[1] >= 2){
-      console.log("Tie Game");
+      alert("Tie Game");
     }else if ( score[0] >= 2){
-      console.log(`${players[0].name} Wins`);
+      alert(`${players[0].name} Wins`);
     }else if ( score[1] >= 2){
-      console.log(`${players[1].name} Wins`);
+      alert(`${players[1].name} Wins`);
     }
 
     passButtonController.hide()
@@ -191,6 +193,7 @@ const game = (() => {
           side.forEach(function(improvement, improvementIndex){
             evnt.detail.card = improvementIndex;
             improvement.div.dispatchEvent(evnt);
+            improvement.updateDisplay()
           })
         })
       }
@@ -342,11 +345,12 @@ function buildLanes(){
 
 
 const startGamebtn = document.getElementById("start-game-btn");
+const startScreen = document.getElementById("start-screen");
 startGamebtn.disabled = true;
 let loading = true
 setTimeout( function(){ startGamebtn.disabled = false;} , 500)
 startGamebtn.addEventListener("click",function(){
-  this.parentNode.removeChild(this)
+  startScreen.parentNode.removeChild(startScreen)
   game.startGame()
 })
 
