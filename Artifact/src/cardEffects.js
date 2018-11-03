@@ -7,6 +7,45 @@ import {sum, shuffle} from './arrayFunctions'
 let effectMap = new Map()  // should i just be uisng an object instead? does it really matter?
 let targetMap = new Map()
 
+function doubleTarget(card, target, callback, conditional = () => true ){
+  card.div.classList.add("glow")
+  game.div.addEventListener("click",function f(ev){
+    ev.stopPropagation()
+    let path = ev.path || (ev.composedPath && ev.composedPath());
+    if (!path) {console.log("no path")}
+    vaild: {
+      if (card != draggedCard) break vaild
+      let lane = path.find(function(p){if (p.classList) return p.classList.contains('lane')}); if (lane == undefined) break vaild;
+      lane = board.lanes.find(function(p){return p.div == lane})
+      let player
+      if (target == "card" || target == "empty"){
+        player = path.find(function(p){if (p.classList) return p.classList.contains('playarea')}); if (player == undefined) break vaild;
+        player = lane.playAreas.findIndex(function(p){return p == player})
+      } else if (target == "tower"){
+        player = path.find(function(p){if (p.classList) return p.classList.contains('tower')}); if (player == undefined) break vaild;
+        player = lane.towers.findIndex(function(p){return p.div == player})
+      }
+      if (target == "card"){
+        target = path.find(function(p){if (p.classList) return p.classList.contains('card')}); if (target == undefined) break vaild;
+        target = lane.cards.findIndex(function(p){return p[player].div == target})
+      }else if (target == "empty"){
+        target = path.find(function(p){if (p.classList) return p.classList.contains('blank')}); if (target == undefined) break vaild;
+        target = lane.cards.findIndex(function(p){return p[player].div == target})
+      }else if (target == "tower"){target = player}
+      if (conditional(lane,player,target)){
+        callback(lane,player,target)
+        board.lanes[game.getCurrentLane()].towers[game.getTurn()].mana[0] -= card.ManaCost
+        board.lanes[game.getCurrentLane()].towers[game.getTurn()].updateDisplay()
+        game.players[game.getTurn()].hand.splice(game.players[game.getTurn()].hand.indexOf(draggedCard),1)
+        draggedCard.div.parentNode.removeChild(draggedCard.div)
+        game.nextTurn()
+      }
+    }
+    card.div.classList.remove("glow")
+    game.div.removeEventListener("click",f,true)
+  },true)
+}
+
 
 // Targets : lane, unit, improvement
 
@@ -82,7 +121,7 @@ effectMap.set("Poised to Strike" , function(ev, lane, player, index){
 targetMap.set("Defensive Stance" , "unit")
 effectMap.set("Defensive Stance" , function(ev, lane, player, index){
   if (board.lanes[lane].cards[index][player].CardType != "Hero") return false
-  board.lanes[lane].cards[index][player].currentArmor[4] += 3;
+  board.lanes[lane].cards[index][player].currentArmor[5] += 3;
   board.lanes[lane].cards[index][player].updateDisplay()
   return true
 });
@@ -386,6 +425,87 @@ effectMap.set("Assassinate" , function(ev, lane, player, index){
   l.collapse()
   return true
 });
+
+targetMap.set("New Orders" , "unit")
+effectMap.set("New Orders" , function(ev, lane, player, index){
+  let l = board.lanes[lane]
+  let card = l.cards[index][player]
+  doubleTarget(draggedCard, "card", function($lane,$player,$targetCard){
+    card.arrow = $targetCard - index
+    card.updateDisplay()
+  }, function($lane,$player,$targetCard){
+    return ( $lane == l && game.players[player] != $player && Math.abs($targetCard - index) <= 1)
+  })
+  return false
+});
+
+targetMap.set("Steal Strength" , "unit")
+effectMap.set("Steal Strength" , function(ev, lane, player, index){
+  let l = board.lanes[lane]
+  let card = l.cards[index][player]
+  doubleTarget(draggedCard, "card", function($lane,$player,$targetCard){
+    card.currentAttack[3] -= 4
+    card.updateDisplay()
+    let $card = $lane.cards[$targetCard][$player]
+    $card.currentAttack[3] += 4
+    $card.updateDisplay()
+  }, function($lane,$player,$targetCard){
+    return ($lane == l)
+  })
+  return false
+});
+
+targetMap.set("Ion Shell" , "unit")
+effectMap.set("Ion Shell" , function(ev, lane, player, index){
+  board.lanes[lane].cards[index][player].retaliate[1 + (1 - player == game.getTurn())] += 3;
+  board.lanes[lane].cards[index][player].updateDisplay()
+  return true
+});
+
+targetMap.set("Forward Charge" , "lane")
+effectMap.set("Forward Charge" , function(ev, lane){
+  let l = board.lanes[lane]
+  let player = game.getTurn()
+  l.cards.forEach(function(card){
+    if (card[player].Name != null) {
+      card[player].siege[3] += 2;
+      card.arrow = 0
+      card[player].updateDisplay()
+    }
+  })
+  return true
+});
+
+targetMap.set("Time of Triumph" , "lane")
+effectMap.set("Time of Triumph" , function(ev, lane){
+  let l = board.lanes[lane]
+  let player = game.getTurn()
+  l.cards.forEach(function(card){
+    if (card[player].Name != null && card[player].CardType == "Hero") {
+      card[player].currentAttack[1] += 4;
+      card[player].currentArmor[1] += 4;
+      card[player].currentHealth[1] += 4;
+      card[player].cleave[1] += 4;
+      card[player].retaliate[1] += 4;
+      card[player].siege[1] += 4;
+      card[player].updateDisplay()
+    }
+  })
+  return true
+});
+// targetMap.set("Pick A Fight" , "unit")
+// effectMap.set("Pick A Fight" , function(ev, lane, player, index){
+//   let l = board.lanes[lane]
+//   let card = l.cards[index][player]
+//   doubleTarget(draggedCard, "card", function($lane,$player,$targetCard){
+//     //ADD TAUNT HERE
+//     card.arrow = $targetCard - index
+//     card.updateDisplay()
+//   }, function($lane,$player,$targetCard){
+//     return ( $lane == l && game.players[player] != $player && Math.abs($targetCard - index) <= 1)
+//   })
+//   return false
+// });
 
 
 //"Grazing Shot","No Accident","Slay","Pick Off","Assassinate"

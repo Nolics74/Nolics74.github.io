@@ -10,22 +10,24 @@ function doubleTarget(card, currentTarget, target, callback, conditional = true 
   card.Abilities[abilityIndex].div.classList.add("glow")
   game.div.addEventListener("click",function f(ev){
     ev.stopPropagation()
+    let path = ev.path || (ev.composedPath && ev.composedPath());
+    if (!path) {console.log("no path")}
     vaild: {
-      let lane = ev.path.find(function(p){if (p.classList) return p.classList.contains('lane')}); if (lane == undefined) break vaild;
+      let lane = path.find(function(p){if (p.classList) return p.classList.contains('lane')}); if (lane == undefined) break vaild;
       lane = board.lanes.find(function(p){return p.div == lane})
       let player
       if (target == "card" || target == "empty"){
-        player = ev.path.find(function(p){if (p.classList) return p.classList.contains('playarea')}); if (player == undefined) break vaild;
+        player = path.find(function(p){if (p.classList) return p.classList.contains('playarea')}); if (player == undefined) break vaild;
         player = lane.playAreas.findIndex(function(p){return p == player})
       } else if (target == "tower"){
-        player = ev.path.find(function(p){if (p.classList) return p.classList.contains('tower')}); if (player == undefined) break vaild;
+        player = path.find(function(p){if (p.classList) return p.classList.contains('tower')}); if (player == undefined) break vaild;
         player = lane.towers.findIndex(function(p){return p.div == player})
       }
       if (target == "card"){
-        target = ev.path.find(function(p){if (p.classList) return p.classList.contains('card')}); if (target == undefined) break vaild;
+        target = path.find(function(p){if (p.classList) return p.classList.contains('card')}); if (target == undefined) break vaild;
         target = lane.cards.findIndex(function(p){return p[player].div == target})
       }else if (target == "empty"){
-        target = ev.path.find(function(p){if (p.classList) return p.classList.contains('blank')}); if (target == undefined) break vaild;
+        target = path.find(function(p){if (p.classList) return p.classList.contains('blank')}); if (target == undefined) break vaild;
         target = lane.cards.findIndex(function(p){return p[player].div == target})
       }else if (target == "tower"){target = player}
       if (conditional(lane,player,target)){
@@ -77,6 +79,33 @@ abilityMap.set("Work the Knife" , function(card,e){
 triggerMap.set("Arcane Aura" , "afterCardPlayed")
 abilityMap.set("Arcane Aura" , function(card,e){
   // console.log("Arcane Aura")
+});
+
+triggerMap.set("Arctic Burn" , "afterCardPlayed")
+abilityMap.set("Arctic Burn" , function(card,e){
+  let lane = board.lanes[game.getCurrentLane()]
+  let player = game.getTurn()
+  let index = lane.cards.findIndex(function(c){ return (c[player] == card) })
+  doubleTarget(card, e.currentTarget, "empty", function($lane,$player,$targetCard){
+    card.currentAttack[3] += 4;
+    let nextSibling = index > $targetCard ? card.div.nextSibling : $lane.cards[$targetCard][$player].div.nextSibling
+    index > $targetCard ? $lane.cards[$targetCard][$player].div.parentNode.insertBefore(card.div,$lane.cards[$targetCard][$player].div) : card.div.parentNode.insertBefore($lane.cards[$targetCard][$player].div,card.div)
+    index > $targetCard ? card.div.parentNode.insertBefore($lane.cards[$targetCard][$player].div, nextSibling) : $lane.cards[$targetCard][$player].div.parentNode.insertBefore(card.div,nextSibling)
+    let temp = $lane.cards[$targetCard][$player]
+    $lane.cards[$targetCard][$player] = lane.cards[index][player]
+    lane.cards[index][player] = temp
+    if(lane.cards[index][1 - player].Name != null){
+        lane.cards[index][player].arrow = 0
+        lane.cards[index][player].updateDisplay()
+    }
+    if($lane.cards[$targetCard][1 - $player].Name != null){
+        $lane.cards[$targetCard][1 - $player].arrow = 0;
+        $lane.cards[$targetCard][1 - $player].updateDisplay()
+    }
+  } , function($lane,$player,$targetCard){
+    return ( $lane == lane && player == $player)
+  })
+  return false
 });
 
 
@@ -133,6 +162,17 @@ abilityMap.set("Mist of Avernus : Effect" , function(card,e){
   })
 });
 
+triggerMap.set("Altar of the Mad Moon : Effect" , "continuousEffect")
+abilityMap.set("Altar of the Mad Moon : Effect" , function(card,e){
+  let lane = board.lanes[e.detail.lane]
+  lane.cards.forEach(function(card){
+    if (card[e.detail.player].Name != null && card[e.detail.player].CardType == "Creep") {
+      card[e.detail.player].regen[4] += 2
+      card[e.detail.player].updateDisplay()
+    }
+  })
+});
+
 triggerMap.set("Verdant Refuge : Effect" , "continuousEffect")
 abilityMap.set("Verdant Refuge : Effect" , function(card,e){
   let lane = board.lanes[e.detail.lane]
@@ -173,7 +213,46 @@ abilityMap.set("Assassin's Apprentice : Effect" , function(card,e){
   doubleTarget(card, e.currentTarget, "card", function($lane,$player,$targetCard){
     card.arrow = $targetCard - index
   } , function($lane,$player,$targetCard){
-    return ( $lane == board.lanes[game.getCurrentLane()] && player != $player && Math.abs($targetCard - index) <= 1)
+    return ( $lane == lane && player != $player && Math.abs($targetCard - index) <= 1)
+  })
+  return false
+});
+
+triggerMap.set("Sister of the Veil : Effect" , "click")
+abilityMap.set("Sister of the Veil : Effect" , function(card,e){
+  let lane = board.lanes[game.getCurrentLane()]
+  let player = game.getTurn()
+  let index = lane.cards.findIndex(function(c){ return (c[player] == card) })
+  doubleTarget(card, e.currentTarget, "card", function($lane,$player,$targetCard){
+    card.arrow = $targetCard - index
+  } , function($lane,$player,$targetCard){
+    return ( $lane == lane && player != $player && Math.abs($targetCard - index) <= 1)
+  })
+  return false
+});
+
+triggerMap.set("Rebel Decoy : Effect" , "click")
+abilityMap.set("Rebel Decoy : Effect" , function(card,e){
+  let lane = board.lanes[game.getCurrentLane()]
+  let player = game.getTurn()
+  let index = lane.cards.findIndex(function(c){ return (c[player] == card) })
+  doubleTarget(card, e.currentTarget, "card", function($lane,$player,$targetCard){
+    let nextSibling = index > $targetCard ? card.div.nextSibling : $lane.cards[$targetCard][$player].div.nextSibling
+    index > $targetCard ? $lane.cards[$targetCard][$player].div.parentNode.insertBefore(card.div,$lane.cards[$targetCard][$player].div) : card.div.parentNode.insertBefore($lane.cards[$targetCard][$player].div,card.div)
+    index > $targetCard ? card.div.parentNode.insertBefore($lane.cards[$targetCard][$player].div, nextSibling) : $lane.cards[$targetCard][$player].div.parentNode.insertBefore(card.div,nextSibling)
+    let temp = $lane.cards[$targetCard][$player]
+    $lane.cards[$targetCard][$player] = lane.cards[index][player]
+    lane.cards[index][player] = temp
+    if(lane.cards[index][1 - player].Name != null){
+        lane.cards[index][player].arrow = 0
+        lane.cards[index][player].updateDisplay()
+    }
+    if($lane.cards[$targetCard][1 - $player].Name != null){
+        $lane.cards[$targetCard][$player].arrow = 0;
+        $lane.cards[$targetCard][$player].updateDisplay()
+    }
+  } , function($lane,$player,$targetCard){
+    return ( $lane == lane && player == $player)
   })
   return false
 });
@@ -275,7 +354,20 @@ abilityMap.set("Revtel Convoy : Effect" , function(card,e){
   card.updateDisplay()
 });
 
-
+triggerMap.set("Emissary of the Quorum : Effect" , "click")
+abilityMap.set("Emissary of the Quorum : Effect" , function(card,e){
+  let lane = board.lanes[game.getCurrentLane()]
+  let player = game.getTurn()
+  let index = lane.cards.findIndex(function(c){ return (c[player] == card) })
+  lane.cards.forEach(function(card){
+    if (card[player].Name != null) {
+      card[player].currentAttack[1] += 2
+      card[player].currentHealth[1] += 2
+      card[player].updateDisplay()
+    }
+  })
+  return true
+});
 
 
 
