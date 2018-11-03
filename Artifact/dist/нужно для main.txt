@@ -1,0 +1,5 @@
+Силы света - Radiant
+Силы тьмы - Dire
+Продолжить - Done
+Разместить - Deploy
+Выберите линии для всех героев - Need to choose lanes for all Heros
