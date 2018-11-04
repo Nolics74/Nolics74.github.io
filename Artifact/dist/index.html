@@ -28,14 +28,22 @@
         <span class="gold">0</span>
         <span class="name">Name:</span>
       </div>
-      <button class="pass-btn bottom UI active" id="pass-btn-bottom" disabled>Pass</button>
-      <button class="pass-btn top UI" id="pass-btn-top" disabled>Pass</button>
+      <button class="pass-btn bottom UI active" id="pass-btn-bottom" disabled>Пас</button>
+      <button class="pass-btn top UI" id="pass-btn-top" disabled>Пас</button>
 
       <div class="UI" id = "start-screen">
         <h1>Artifact</h1>
         <h2>Javascript</h2>
 
         <button type="button" name="startGame" id='start-game-btn' class="btn UI">Начать игру</button>
+
+        <textarea id='deck-textarea' class = 'display-none' rows="12" cols="70"> Колода </textarea>
+        <textarea id='heros-textarea' class = 'display-none' rows="12" cols="70"> Дерои </textarea>
+
+        <div class="game-options">
+          <button type="button" name="editDeck" id='deck-game-btn' class="btn UI">Колода</button>
+          <button type="button" name="editHeros" id='heros-game-btn' class="btn UI">Герои</button>
+        </div>
 
         <div class="credit">
           <a>Разработчик: Bubblebooy</a> /
