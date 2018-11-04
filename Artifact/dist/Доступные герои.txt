@@ -1,0 +1,4 @@
+Доступные герои - 
+Legion Commander,Lycan,Winter Wyvern,Skywrath Mage,Centaur Warrunner,
+Treant Protector,Enchantress,Debbi the Cunning,Keefe the Bold,
+Fahrvhan the Dreamer,J'Muy the Wise,Axe
