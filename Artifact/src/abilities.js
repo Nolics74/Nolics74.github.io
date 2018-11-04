@@ -1,4 +1,5 @@
 import {game , cardData, posAvail} from './index.js'
+import {card , blank, draggedCard} from './card'
 import {board} from './board'
 import {sum} from './arrayFunctions'
 
@@ -8,6 +9,7 @@ let triggerMap = new Map()
 function doubleTarget(card, currentTarget, target, callback, conditional = true ){
   let abilityIndex = card.Abilities.findIndex(function(p){ console.log(p.div , currentTarget) ;return p.div == currentTarget})
   card.Abilities[abilityIndex].div.classList.add("glow")
+  game.div.classList.add("target")
   game.div.addEventListener("click",function f(ev){
     ev.stopPropagation()
     let path = ev.path || (ev.composedPath && ev.composedPath());
@@ -37,6 +39,7 @@ function doubleTarget(card, currentTarget, target, callback, conditional = true 
         game.nextTurn()
       }
     }
+    game.div.classList.remove("target")
     card.Abilities[abilityIndex].div.classList.remove("glow")
     game.div.removeEventListener("click",f,true)
   },true)
@@ -354,11 +357,17 @@ abilityMap.set("Revtel Convoy : Effect" , function(card,e){
   card.updateDisplay()
 });
 
+triggerMap.set("Thunderhide Pack : Effect" , "continuousEffect")
+abilityMap.set("Thunderhide Pack : Effect" , function(card,e){
+  card.siege[4] += 6
+  card.updateDisplay()
+});
+
 triggerMap.set("Emissary of the Quorum : Effect" , "click")
 abilityMap.set("Emissary of the Quorum : Effect" , function(card,e){
   let lane = board.lanes[game.getCurrentLane()]
   let player = game.getTurn()
-  let index = lane.cards.findIndex(function(c){ return (c[player] == card) })
+  // let index = lane.cards.findIndex(function(c){ return (c[player] == card) })
   lane.cards.forEach(function(card){
     if (card[player].Name != null) {
       card[player].currentAttack[1] += 2
@@ -368,6 +377,190 @@ abilityMap.set("Emissary of the Quorum : Effect" , function(card,e){
   })
   return true
 });
+
+// Items
+
+triggerMap.set("Leather Armor : Effect" , "continuousEffect")
+abilityMap.set("Leather Armor : Effect" , function(card,e){
+  //let lane = board.lanes[e.detail.lane]; let index = e.detail.card; lane.cards[index][e.detail.player]
+  let $card = board.lanes[e.detail.lane].cards[e.detail.card][e.detail.player]
+  $card.currentArmor[4] += 1
+  $card.updateDisplay()
+});
+
+triggerMap.set("Traveler's Cloak : Effect" , "continuousEffect")
+abilityMap.set("Traveler's Cloak : Effect" , function(card,e){
+  let $card = board.lanes[e.detail.lane].cards[e.detail.card][e.detail.player]
+  $card.currentHealth[4] += 4
+  $card.updateDisplay()
+});
+
+triggerMap.set("Short Sword : Effect" , "continuousEffect")
+abilityMap.set("Short Sword : Effect" , function(card,e){
+  let $card = board.lanes[e.detail.lane].cards[e.detail.card][e.detail.player]
+  $card.currentAttack[4] += 2
+  $card.updateDisplay()
+});
+
+triggerMap.set("Demagicking Maul : Effect" , "continuousEffect")
+abilityMap.set("Demagicking Maul : Effect" , function(card,e){
+  let $card = board.lanes[e.detail.lane].cards[e.detail.card][e.detail.player]
+  $card.currentAttack[4] += 2
+  $card.updateDisplay()
+});
+
+triggerMap.set("Demagicking Maul : EffectActive" , "click")
+abilityMap.set("Demagicking Maul : EffectActive" , function(card,e){
+  let lane = board.lanes[game.getCurrentLane()]
+  let player = game.getTurn()
+  let index = lane.cards.findIndex(function(c){ return (c[player].Weapon == card) })
+  if (lane.cards[index + lane.cards[index][player].arrow][1 - player].Name == null){
+    if (lane.improvements[1 - player].length){
+      let improvment = Math.floor(Math.random()*lane.improvements[1 - player].length)
+      improvment = lane.improvements[1 - player].splice(improvment)[0]
+      improvment.div.parentNode.removeChild(improvment.div)
+      return true
+    }
+  }
+  return false
+});
+
+triggerMap.set("Stonehall Plate : Effect" , "continuousEffect")
+abilityMap.set("Stonehall Plate : Effect" , function(card,e){
+  if (!card.stonehall){
+    card.div.addEventListener("afterCombat", function(){card.Armor = card.Armor || 1 ; card.Armor += 1})
+    card.stonehall = true
+  }
+  let $card = board.lanes[e.detail.lane].cards[e.detail.card][e.detail.player]
+  card.Armor = card.Armor || 1
+  $card.currentArmor[4] += card.Armor
+  $card.updateDisplay()
+});
+
+triggerMap.set("Stonehall Cloak : Effect" , "continuousEffect")
+abilityMap.set("Stonehall Cloak : Effect" , function(card,e){
+  if (!card.stonehall){
+    card.div.addEventListener("afterCombat", function(){card.Health = card.Health || 4 ; card.Health += 2})
+    card.stonehall = true
+  }
+  let $card = board.lanes[e.detail.lane].cards[e.detail.card][e.detail.player]
+  card.Health = card.Health || 4
+  $card.currentHealth[4] += card.Health
+  $card.updateDisplay()
+});
+
+triggerMap.set("Blade of the Vigil : Effect" , "continuousEffect")
+abilityMap.set("Blade of the Vigil : Effect" , function(card,e){
+  let $card = board.lanes[e.detail.lane].cards[e.detail.card][e.detail.player]
+  $card.currentAttack[4] += 2
+  $card.cleave[4] += 2
+  $card.updateDisplay()
+});
+
+triggerMap.set("Keenfolk Musket : Effect" , "continuousEffect")
+abilityMap.set("Keenfolk Musket : Effect" , function(card,e){
+  let $card = board.lanes[e.detail.lane].cards[e.detail.card][e.detail.player]
+  $card.currentAttack[4] += 2
+  $card.updateDisplay()
+});
+
+triggerMap.set("Keenfolk Musket : EffectActive" , "click")
+abilityMap.set("Keenfolk Musket : EffectActive" , function(card,e){
+  // let $card = board.lanes[e.detail.lane].cards[e.detail.card][e.detail.player]
+  doubleTarget(card, e.currentTarget, "card", function(lane,player,targetCard){
+    lane.cards[targetCard][player].currentHealth[0] -= 2 - sum(lane.cards[targetCard][player].currentArmor)
+    lane.collapse()
+  } , function(lane,player,targetCard){
+    return lane == board.lanes[game.getCurrentLane()]
+  })
+  return false
+});
+
+triggerMap.set("Red Mist Maul : Effect" , "continuousEffect")
+abilityMap.set("Red Mist Maul : Effect" , function(card,e){
+  let $card = board.lanes[e.detail.lane].cards[e.detail.card][e.detail.player]
+  $card.currentAttack[4] += 2
+  $card.siege[4] += 5
+  $card.updateDisplay()
+});
+
+triggerMap.set("Shield of Basilius : Effect" , "continuousEffect")
+abilityMap.set("Shield of Basilius : Effect" , function(card,e){
+  let $card = board.lanes[e.detail.lane].cards[e.detail.card][e.detail.player]
+  $card.currentArmor[4] += 2
+  $card.updateDisplay()
+  for (var i = -1; i < 2; i+=2) {
+    let lane = board.lanes[e.detail.lane]
+    let index = e.detail.card
+    if(lane.cards[index+i] != null && lane.cards[index+i][e.detail.player].Name != null){
+      lane.cards[index+i][e.detail.player].currentArmor[4] += 1;
+      lane.cards[index+i][e.detail.player].updateDisplay()
+    }
+  }
+});
+
+triggerMap.set("Horn of the Alpha : Effect" , "continuousEffect")
+abilityMap.set("Horn of the Alpha : Effect" , function(card,e){
+  let $card = board.lanes[e.detail.lane].cards[e.detail.card][e.detail.player]
+  $card.currentHealth[4] += 4
+  $card.updateDisplay()
+});
+triggerMap.set("Horn of the Alpha : EffectActive" , "click")
+abilityMap.set("Horn of the Alpha : EffectActive" , function(c,e){
+  let summons = [[],[]]
+  let lane = board.lanes[game.getCurrentLane()]
+  let creep =  card(cardData.Cards.find( function(ev){  return ev.Name == "Thunderhide Pack" }),game.players[game.getTurn()])
+  summons[game.getTurn()].push(creep);
+  lane.summon(summons)
+  return true
+});
+
+triggerMap.set("Ring of Tarrasque : Effect" , "continuousEffect")
+abilityMap.set("Ring of Tarrasque : Effect" , function(card,e){
+  let $card = board.lanes[e.detail.lane].cards[e.detail.card][e.detail.player]
+  $card.currentHealth[4] += 4
+  $card.regen[4] += 6
+  $card.updateDisplay()
+});
+
+triggerMap.set("Phase Boots : Effect" , "continuousEffect")
+abilityMap.set("Phase Boots : Effect" , function(card,e){
+  let $card = board.lanes[e.detail.lane].cards[e.detail.card][e.detail.player]
+  $card.currentHealth[4] += 4
+  $card.updateDisplay()
+});
+triggerMap.set("Phase Boots : EffectActive" , "click")
+abilityMap.set("Phase Boots : EffectActive" , function(c,e){
+  let lane = board.lanes[game.getCurrentLane()]
+  let player = game.getTurn()
+  let index = lane.cards.findIndex(function(card){ return (card[player].Accessory == c) })
+  console.log(index)
+  let card = lane.cards[index][player]
+  doubleTarget(c, e.currentTarget, "card", function($lane,$player,$targetCard){
+    let nextSibling = index > $targetCard ? card.div.nextSibling : $lane.cards[$targetCard][$player].div.nextSibling
+    index > $targetCard ? $lane.cards[$targetCard][$player].div.parentNode.insertBefore(card.div,$lane.cards[$targetCard][$player].div) : card.div.parentNode.insertBefore($lane.cards[$targetCard][$player].div,card.div)
+    index > $targetCard ? card.div.parentNode.insertBefore($lane.cards[$targetCard][$player].div, nextSibling) : $lane.cards[$targetCard][$player].div.parentNode.insertBefore(card.div,nextSibling)
+    let temp = $lane.cards[$targetCard][$player]
+    $lane.cards[$targetCard][$player] = lane.cards[index][player]
+    lane.cards[index][player] = temp
+    if(lane.cards[index][1 - player].Name != null){
+        lane.cards[index][player].arrow = 0
+        lane.cards[index][player].updateDisplay()
+    }
+    if($lane.cards[$targetCard][1 - $player].Name != null){
+        $lane.cards[$targetCard][$player].arrow = 0;
+        $lane.cards[$targetCard][$player].updateDisplay()
+    }
+  } , function($lane,$player,$targetCard){
+    return ( $lane == lane && player == $player)
+  })
+  return false
+});
+
+// let lane = board.lanes[e.detail.lane]
+// let index = e.detail.card
+// lane.cards[index+i][e.detail.player]
+
 
 
 
