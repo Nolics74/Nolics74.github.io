@@ -149,7 +149,7 @@ effectMap.set("Enrage" , function(ev, lane, player, index){
 targetMap.set("God's Strength" , "unit")
 effectMap.set("God's Strength" , function(ev, lane, player, index){
   if (board.lanes[lane].cards[index][player].Color != "Red" || board.lanes[lane].cards[index][player].CardType != "Hero") return false
-  board.lanes[lane].cards[index][player].currentAttack[1 + (1 - player == game.getTurn())] += 2;
+  board.lanes[lane].cards[index][player].currentAttack[1 + (1 - player == game.getTurn())] += 4;
   board.lanes[lane].cards[index][player].updateDisplay()
   return true
 });
@@ -537,6 +537,43 @@ effectMap.set("Sow Venom" , function(ev, lane){
     summons[game.getTurn()].push(creep);
   }
   lane.summon(summons)
+  return true
+});
+
+targetMap.set("Mystic Flare" , "unit")
+effectMap.set("Mystic Flare" , function(ev, lane, player, index){
+  let l = board.lanes[lane]
+  for (var i = 0; i < 12 ; ) {
+    for (var j = -1; j <= 1; j++) {
+      if(l.cards[index + j] != null && l.cards[index + j][player].Name != null){
+        l.cards[index+j][player].currentHealth[0] -= 2 - sum(l.cards[index+j][player].currentArmor)
+        i +=2
+      }
+    }
+  }
+  for (var j = -1; j <= 1; j++) {
+    if(l.cards[index + j] != null && l.cards[index + j][player].Name != null){
+      l.cards[index+j][player].updateDisplay()
+    }
+  }
+  l.collapse()
+  return true
+});
+
+targetMap.set("Coup de Grace" , "unit")
+effectMap.set("Coup de Grace" , function(ev, lane, player, index){
+  let l = board.lanes[lane]
+  if (l.cards[index][player].CardType != "Hero") return false
+  game.condemn(l.cards[index][player],board.lanes[lane])
+  game.infoDisplayUpdate();
+  l.collapse()
+  let hand = game.players[game.getTurn()].hand
+  if (hand.length > 1){
+    let card = Math.floor(Math.random()*hand.length)
+    if (hand[card] == draggedCard) card = ( card + 1 ) % hand.length
+    card = hand.splice(card,1)[0]
+    card.div.parentNode.removeChild(card.div)
+  }
   return true
 });
 

@@ -65,7 +65,7 @@ abilityMap.set("Pack Leadership" , function(card,e){
 
 triggerMap.set("Wisdom of the Elders" , "click")
 abilityMap.set("Wisdom of the Elders" , function(card,e){
-  card.player.draw();card.player.draw()
+  card.player.draw()
   return true
 });
 
@@ -612,6 +612,18 @@ abilityMap.set("Plague Ward : Effect" , function(card,e){
     if ($card[1-e.detail.player].Name != null) {
       $card[1-e.detail.player].currentHealth[0] -= 2 - (sum($card[1-e.detail.player].currentArmor) < 0 ? sum($card[1-e.detail.player].currentArmor) : 0)
       $card[1-e.detail.player].updateDisplay()
+    }
+  }
+});
+
+triggerMap.set("Prowler Vanguard : Effect" , "continuousEffect")
+abilityMap.set("Prowler Vanguard : Effect" , function(card,e){
+  for (var i = -1; i < 2; i+=2) {
+    let lane = board.lanes[e.detail.lane]
+    let index = e.detail.card
+    if(lane.cards[index+i] != null && lane.cards[index+i][e.detail.player].Name != null){
+      lane.cards[index+i][e.detail.player].currentArmor[4] += 1;
+      lane.cards[index+i][e.detail.player].updateDisplay()
     }
   }
 });
