@@ -1,4 +1,5 @@
 Доступные герои - 
 Legion Commander,Lycan,Winter Wyvern,Skywrath Mage,Centaur Warrunner,
-Treant Protector,Enchantress,Debbi the Cunning,Keefe the Bold,
+Omniknight,Drow Ranger,Sorla Khan,Phantom Assassin,Lion,Lich,Bounty Hunter,Venomancer,
+Prellex,Pugna,Sven,Luna,Treant Protector,Enchantress,Debbi the Cunning,Keefe the Bold,
 Fahrvhan the Dreamer,J'Muy the Wise,Axe
