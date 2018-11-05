@@ -29,7 +29,7 @@ function buildStages(){
   })
 
   deployButton.classList.add("deploy-btn", "btn" ,"UI" ,"display-none")
-  deployButton.textContent = "Разместить"
+  deployButton.textContent = "Deploy"
   game.div.appendChild(deployButton);
   deployButton.addEventListener("click",function(){
     if (stages[0].hasChildNodes() || stages[1].hasChildNodes()){
@@ -97,6 +97,13 @@ function deployment(){
           side[rand[i]].push(hero)
         }
       }
+      game.extraDeploy[sideIndex].forEach(function(lane, i){
+        lane.forEach(function(creep){
+          side[i].push(creep)
+          board.lanes[i].stages[sideIndex].appendChild(creep.div)
+        })
+        lane.splice(0)
+      })
       game.players[sideIndex].getHeros().forEach(function(hero){
         if (hero.respawn == 0 && game.getRound() != 0){
           if (!game.players[sideIndex].computer) {
