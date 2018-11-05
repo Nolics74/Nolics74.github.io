@@ -1,5 +1,6 @@
 Доступные карты - 
-Sow Venom,Barracks,Eclipse, Savage Wolf,Fighting Instinct,Thunderhide Pack,Emissary of the Quorum,
+Prowler Vanguard,Coup de Grace,Mystic Flare,Sow Venom,Barracks,Eclipse, Savage Wolf,Fighting Instinct,Thunderhide Pack,
+Emissary of the Quorum,
 New Orders,Ion Shell,Time of Triumph,Forward Charge,Altar of the Mad Moon,
 New Orders,Sister of the Veil,Rebel Decoy,Steam Cannon,Keenfolk Turret,
 Assassin's Apprentice,Grazing Shot,No Accident,Slay,Pick Off,
