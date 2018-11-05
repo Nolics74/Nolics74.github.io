@@ -1,5 +1,5 @@
 Доступные карты - 
-Savage Wolf,Fighting Instinct,Thunderhide Pack,Emissary of the Quorum,
+Sow Venom,Barracks,Eclipse, Savage Wolf,Fighting Instinct,Thunderhide Pack,Emissary of the Quorum,
 New Orders,Ion Shell,Time of Triumph,Forward Charge,Altar of the Mad Moon,
 New Orders,Sister of the Veil,Rebel Decoy,Steam Cannon,Keenfolk Turret,
 Assassin's Apprentice,Grazing Shot,No Accident,Slay,Pick Off,
@@ -16,3 +16,5 @@ Call the Reserves,Better Late Than Never,Iron Branch Protection,
 Avernus' Blessing,Dimensional Portal,Bronze Legionnaire,
 Marrowfell Brawler,Ogre Conscript,Troll Soothsayer,Untested Grunt,
 Thunderhide Alpha
+
+
