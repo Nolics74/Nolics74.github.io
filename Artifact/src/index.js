@@ -283,6 +283,34 @@ function posAvail(total, position, index) {
   return total
 }
 
+function battle( attackerLane, attackerPlayer, attackerIndex, targetLane, targetPlayer, targetIndex , dispatchAttackingEvent = true, bidirectional = true){
+  let attacker = board.lanes[attackerLane].cards[attackerIndex][attackerPlayer]
+  let target = board.lanes[targetLane].cards[targetIndex][targetPlayer]
+  if (dispatchAttackingEvent) {
+    let evnt = new CustomEvent('whenAttacking', { detail: {lane: attackerLane, card: attackerIndex, player: attackerPlayer} })
+    attacker.div.dispatchEvent(evnt); attacker.updateDisplay();
+    if (attacker.CardType == "Hero"){
+      if (attacker.Accessory) {attacker.Accessory.div.dispatchEvent(evnt); attacker.Accessory.updateDisplay();}
+      if (attacker.Armor) {attacker.Armor.div.dispatchEvent(evnt); attacker.Armor.updateDisplay();}
+      if (attacker.Weapon) {attacker.Weapon.div.dispatchEvent(evnt); attacker.Weapon.updateDisplay();}
+    }
+    evnt.detail.lane = targetLane; evnt.detail.card = targetIndex; evnt.detail.player = targetPlayer;
+    target.div.dispatchEvent(evnt); target.updateDisplay();
+    if (target.CardType == "Hero"){
+      if (target.Accessory) {target.Accessory.div.dispatchEvent(evnt); target.Accessory.updateDisplay();}
+      if (target.Armor) {target.Armor.div.dispatchEvent(evnt); target.Armor.updateDisplay();}
+      if (target.Weapon) {target.Weapon.div.dispatchEvent(evnt); target.Weapon.updateDisplay();}
+    }
+  }
+  if (!attacker.disarmed){
+    if(sum(target.retaliate)>0){attacker.currentHealth[0] -= sum(target.retaliate) - sum(attacker.currentArmor)}
+    target.currentHealth[0] -= sum(attacker.currentAttack) - sum(target.currentArmor)
+  }
+  game.infoDisplayUpdate();
+
+  if (bidirectional) battle(targetLane, targetPlayer, targetIndex, attackerLane, attackerPlayer, attackerIndex, false, false)
+}
+
 function combat(){
 
   let currentLane = board.lanes[game.getCurrentLane()]
@@ -290,27 +318,28 @@ function combat(){
   currentLane.cards.forEach(function(row, rowIndex){
     row.forEach(function(attacker, attackerIndex){
       if (attacker.Name == null){ return; };
-      let target = currentLane.cards[rowIndex + attacker.arrow][1 - attackerIndex] // cause arror if pointing to null (not blank), this shoud not happen anyways
-      if (target == null || target.Name == null ){
-        target = currentLane.towers[1-attackerIndex] ;
-      }else{
-        if(sum(target.retaliate)>0){attacker.currentHealth[0] -= sum(target.retaliate) - sum(attacker.currentArmor)}
-        if(sum(attacker.siege)>0){currentLane.towers[1-attackerIndex].currentHealth[0] -= sum(attacker.siege)}
-        if(sum(attacker.cleave)>0){
-          for (var s = -1; s < 2; s+=2) {
-            let $target = currentLane.cards[rowIndex + attacker.arrow + s]
-            if ($target != null){
-              $target = currentLane.cards[rowIndex + attacker.arrow + s][1 - attackerIndex]
-              if ($target != null && $target.Name != null ){
-                $target.currentHealth[0] -= sum(attacker.cleave) - sum($target.currentArmor)
+      if (!attacker.disarmed){
+        let target = currentLane.cards[rowIndex + attacker.arrow][1 - attackerIndex] // cause arror if pointing to null (not blank), this shoud not happen anyways
+        if (target == null || target.Name == null ){
+          target = currentLane.towers[1-attackerIndex] ;
+        }else{
+          if(sum(target.retaliate)>0){attacker.currentHealth[0] -= sum(target.retaliate) - sum(attacker.currentArmor)}
+          if(sum(attacker.siege)>0){currentLane.towers[1-attackerIndex].currentHealth[0] -= sum(attacker.siege)}
+          if(sum(attacker.cleave)>0){
+            for (var s = -1; s < 2; s+=2) {
+              let $target = currentLane.cards[rowIndex + attacker.arrow + s]
+              if ($target != null){
+                $target = currentLane.cards[rowIndex + attacker.arrow + s][1 - attackerIndex]
+                if ($target != null && $target.Name != null ){
+                  $target.currentHealth[0] -= sum(attacker.cleave) - sum($target.currentArmor)
+                }
               }
             }
           }
         }
+        target.currentHealth[0] -= sum(attacker.currentAttack) - sum(target.currentArmor)
       }
-      target.currentHealth[0] -= sum(attacker.currentAttack) - sum(target.currentArmor)
     });
-
     row.forEach(function(attacker, attackerIndex){
       if (attacker.Name == null){ return };
       if(sum(attacker.regen)>0){attacker.currentHealth[0] += sum(attacker.regen)}
@@ -323,7 +352,7 @@ function combat(){
   currentLane.towers[0].updateDisplay();
   game.dispatchEvent("afterCombat")
   game.infoDisplayUpdate();
-  if (game.gameOver()) {};
+  if (game.gameOver()) {};  // does this do anything??
 }
 
 
@@ -354,13 +383,13 @@ function buildLanes(){
   })
 }
 
-const allcards = ["Prowler Vanguard","Coup de Grace","Mystic Flare","Sow Venom","Barracks","Eclipse","Savage Wolf","Fighting Instinct","Thunderhide Pack","Emissary of the Quorum","New Orders","Ion Shell","Time of Triumph","Forward Charge","Altar of the Mad Moon","New Orders","Sister of the Veil","Rebel Decoy","Steam Cannon","Keenfolk Turret","Assassin's Apprentice","Grazing Shot","No Accident","Slay","Pick Off","Selfish Cleric","Revtel Convoy","Ravenous Mass","Rampaging Hellbear","Satyr Duelist","Savage Wolf","Satyr Magician","Disciple of Nevermore","Legion Standard Bearer","Mercenary Exiles","Verdant Refuge","Mist of Avernus","Ignite","Assault Ladders","Mana Drain","Payday","Arcane Censure","Stars Align","Bellow","Rumusque Blessing","Defensive Bloom","Restoration Effort","Intimidation","Curse of Atrophy","Strafing Run","Lightning Strike","Rolling Storm","Tower Barrage","Foresight","Prey on the Weak","Remote Detonation","Thunderstorm","Bolt of Damocles","Poised to Strike","Defensive Stance","Enrage","God's Strength","Spring the Trap","Double Edge","Conflagration","Call the Reserves", "Better Late Than Never","Iron Branch Protection","Avernus' Blessing","Dimensional Portal","Bronze Legionnaire","Marrowfell Brawler","Ogre Conscript","Troll Soothsayer","Untested Grunt","Thunderhide Alpha"]
+const allcards = ["Echo Slam","Winter's Curse","Battlefield Control","Gust","Act of Defiance","Frostbite","Gank","Duel","Berserker's Call","Prowler Vanguard","Coup de Grace","Mystic Flare","Sow Venom","Barracks","Eclipse","Savage Wolf","Fighting Instinct","Thunderhide Pack","Emissary of the Quorum","New Orders","Ion Shell","Time of Triumph","Forward Charge","Altar of the Mad Moon","New Orders","Sister of the Veil","Rebel Decoy","Steam Cannon","Keenfolk Turret","Assassin's Apprentice","Grazing Shot","No Accident","Slay","Pick Off","Selfish Cleric","Revtel Convoy","Ravenous Mass","Rampaging Hellbear","Satyr Duelist","Savage Wolf","Satyr Magician","Disciple of Nevermore","Legion Standard Bearer","Mercenary Exiles","Verdant Refuge","Mist of Avernus","Ignite","Assault Ladders","Mana Drain","Payday","Arcane Censure","Stars Align","Bellow","Rumusque Blessing","Defensive Bloom","Restoration Effort","Intimidation","Curse of Atrophy","Strafing Run","Lightning Strike","Rolling Storm","Tower Barrage","Foresight","Prey on the Weak","Remote Detonation","Thunderstorm","Bolt of Damocles","Poised to Strike","Defensive Stance","Enrage","God's Strength","Spring the Trap","Double Edge","Conflagration","Call the Reserves", "Better Late Than Never","Iron Branch Protection","Avernus' Blessing","Dimensional Portal","Bronze Legionnaire","Marrowfell Brawler","Ogre Conscript","Troll Soothsayer","Untested Grunt","Thunderhide Alpha"]
 let deck
-let AIdeck = ["Prowler Vanguard","Coup de Grace","Mystic Flare","Sow Venom","Barracks","Thunderhide Pack","Altar of the Mad Moon","Time of Triumph","Forward Charge","Ion Shell","Sister of the Veil","Rebel Decoy","Assassin's Apprentice","Grazing Shot","No Accident","Slay","Pick Off","Selfish Cleric","Revtel Convoy","Ravenous Mass","Rampaging Hellbear","Satyr Duelist","Savage Wolf","Satyr Magician","Disciple of Nevermore","Legion Standard Bearer","Mercenary Exiles","Verdant Refuge","Mist of Avernus","Ignite","Assault Ladders","Mana Drain","Arcane Censure","Stars Align","Bellow","Rumusque Blessing","Defensive Bloom","Restoration Effort","Intimidation","Curse of Atrophy","Strafing Run","Lightning Strike","Rolling Storm","Tower Barrage","Foresight","Prey on the Weak","Remote Detonation","Thunderstorm","Bolt of Damocles","Poised to Strike","Defensive Stance","Enrage","God's Strength","Spring the Trap","Double Edge","Conflagration","Call the Reserves", "Better Late Than Never","Iron Branch Protection","Avernus' Blessing","Dimensional Portal","Bronze Legionnaire","Marrowfell Brawler","Ogre Conscript","Troll Soothsayer","Untested Grunt","Thunderhide Alpha"]
+let AIdeck = ["Echo Slam","Winter's Curse","Gust","Act of Defiance","Frostbite","Berserker's Call","Prowler Vanguard","Coup de Grace","Mystic Flare","Sow Venom","Barracks","Thunderhide Pack","Altar of the Mad Moon","Time of Triumph","Forward Charge","Ion Shell","Sister of the Veil","Rebel Decoy","Assassin's Apprentice","Grazing Shot","No Accident","Slay","Pick Off","Selfish Cleric","Revtel Convoy","Ravenous Mass","Rampaging Hellbear","Satyr Duelist","Savage Wolf","Satyr Magician","Disciple of Nevermore","Legion Standard Bearer","Mercenary Exiles","Verdant Refuge","Mist of Avernus","Ignite","Assault Ladders","Mana Drain","Arcane Censure","Stars Align","Bellow","Rumusque Blessing","Defensive Bloom","Restoration Effort","Intimidation","Curse of Atrophy","Strafing Run","Lightning Strike","Rolling Storm","Tower Barrage","Foresight","Prey on the Weak","Remote Detonation","Thunderstorm","Bolt of Damocles","Poised to Strike","Defensive Stance","Enrage","God's Strength","Spring the Trap","Double Edge","Conflagration","Call the Reserves", "Better Late Than Never","Iron Branch Protection","Avernus' Blessing","Dimensional Portal","Bronze Legionnaire","Marrowfell Brawler","Ogre Conscript","Troll Soothsayer","Untested Grunt","Thunderhide Alpha"]
 let AIheros = ["J\'Muy the Wise","Legion Commander","Lycan","Centaur Warrunner","Drow Ranger","Sorla Khan","Phantom Assassin","Bounty Hunter","Venomancer","Prellex","Sven","Luna","Treant Protector","Enchantress","Debbi the Cunning","Keefe the Bold","Fahrvhan the Dreamer","Axe"] // "Beastmaster"
 AIheros = shuffle(AIheros).slice(0,5)
 
-let allheroes = ["Legion Commander","Lycan","Winter Wyvern","Skywrath Mage","Centaur Warrunner","Omniknight","Drow Ranger","Sorla Khan","Phantom Assassin","Lion","Lich","Bounty Hunter","Venomancer","Prellex","Pugna","Sven","Luna","Treant Protector","Enchantress","Debbi the Cunning","Keefe the Bold","Fahrvhan the Dreamer","J\'Muy the Wise","Axe"] // "Beastmaster"
+let allheroes = ["Legion Commander","Lycan","Winter Wyvern","Skywrath Mage","Centaur Warrunner","Earthshaker","Omniknight","Drow Ranger","Sorla Khan","Phantom Assassin","Lion","Lich","Bounty Hunter","Venomancer","Prellex","Pugna","Sven","Luna","Treant Protector","Enchantress","Debbi the Cunning","Keefe the Bold","Fahrvhan the Dreamer","J\'Muy the Wise","Axe"] // "Beastmaster"
 let heroes
 
 const startGamebtn = document.getElementById("start-game-btn");
@@ -374,6 +403,8 @@ const heroesOptions = document.getElementById("heroes-options")
 const deckResetBtn = document.getElementById("deck-reset-btn")
 const deck3of = document.getElementById("deck-3of")
 const heroesResetBtn = document.getElementById("heroes-reset-btn")
+
+const refreshBtn = document.getElementById("refresh-btn")
 
 deckBtn.title = "If card is not vaild or implemented it will be ignored"
 heroBtn.title = "Uses the 1st 5 heroes"
@@ -403,6 +434,7 @@ startGamebtn.addEventListener("click",function(){
   heroes = heroTextarea.value.split(",")
   heroes = heroes.map(function(card){return card.trim()})
   heroes = heroes.filter(function(card){return allheroes.includes(card)})
+  //heroes = heroes.filter(function(card){return allheroes.map(function(hero){return hero.toLowerCase()}).includes(card.toLowerCase())})
   if (heroes.length < 5) heroes = allheroes
   localStorage.setItem("heroes", heroes)
   if (heroes.length > 5) heroes = heroes.slice(0,5)
@@ -411,6 +443,7 @@ startGamebtn.addEventListener("click",function(){
   if (deck3of.checked) deck = deck.concat(deck,deck) ;
   AIdeck = AIdeck.concat(AIdeck,AIdeck)
   startScreen.parentNode.removeChild(startScreen)
+  refreshBtn.disabled = false
   game.startGame()
 })
 deckBtn.addEventListener("click", function(){
@@ -432,5 +465,12 @@ heroesResetBtn.addEventListener("click", function(){
   heroTextarea.value = allheroes;
 })
 
+refreshBtn.title = "Makes sure everything is updated and you have at least one space to play a creep"
+refreshBtn.addEventListener("click", function(){
+  board.collapse()
+  board.lanes[game.getCurrentLane()].expand()
+  game.dispatchEvent("continuousRefresh")
+})
 
-export {game, cardData, posAvail};
+
+export {game, cardData, posAvail, battle};
