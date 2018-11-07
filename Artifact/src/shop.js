@@ -1,4 +1,4 @@
-import {game , cardData} from './index.js'
+import {game , cardData, itemDeck, secretShopDeck} from './index.js'
 import {deployment} from './deploy.js'
 import {sum, shuffle} from './arrayFunctions'
 import {card} from './card'
@@ -18,11 +18,10 @@ const shop = (() => {
   closeButton.type="submit"
   div.appendChild(closeButton)
 
-  let itemDeck = ["Demagicking Maul","Stonehall Plate","Stonehall Cloak"]
-  itemDeck = itemDeck.concat(itemDeck,itemDeck)
+  // let itemDeck = ["Demagicking Maul","Stonehall Plate","Stonehall Cloak","Leather Armor","Short Sword","Traveler's Cloak","Leather Armor","Short Sword","Traveler's Cloak"]
   let item
-  let consumableDeck = ["Leather Armor","Short Sword","Traveler's Cloak"]//["Healing Salve","Town Portal Scroll","Fountain Flask","Potion of Knowledge"]
-  let secretShopDeck = ["Demagicking Maul","Stonehall Plate","Stonehall Cloak","Leather Armor","Short Sword","Traveler's Cloak","Blade of the Vigil","Keenfolk Musket","Red Mist Maul","Shield of Basilius","Horn of the Alpha","Phase Boots","Ring of Tarrasque"]
+  let consumableDeck = ["Healing Salve","Town Portal Scroll","Fountain Flask","Potion of Knowledge"]
+  // let secretShopDeck = ["Demagicking Maul","Stonehall Plate","Stonehall Cloak","Leather Armor","Short Sword","Traveler's Cloak","Blade of the Vigil","Keenfolk Musket","Red Mist Maul","Shield of Basilius","Horn of the Alpha","Phase Boots","Ring of Tarrasque"]
 
   closeButton.addEventListener("click",function(){
     div.classList.add('display-none');
@@ -50,7 +49,8 @@ const shop = (() => {
           game.players[0].handDiv.appendChild(newCard.div)
           if (depleting) {
             item = draw(itemDeck,true)
-            if (item) itemShop.appendChild(item.div)}
+            if (item) itemShop.appendChild(item.div)
+          }
           newCard.div.removeEventListener("click", buy)
         }
       })
