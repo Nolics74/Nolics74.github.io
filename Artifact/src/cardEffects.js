@@ -137,6 +137,14 @@ effectMap.set("Combat Training" , function(ev, lane, player, index){
   return true
 });
 
+targetMap.set("Collateral Damage" , "unit")
+effectMap.set("Collateral Damage" , function(ev, lane, player, index){
+  if (board.lanes[lane].cards[index][player].CardType != "Hero" || board.lanes[lane].cards[index][player].Color != "Black" ) return false
+  board.lanes[lane].cards[index][player].siege[1 + (1 - player == game.getTurn())] += 3;
+  board.lanes[lane].cards[index][player].updateDisplay()
+  return true
+});
+
 targetMap.set("Enrage" , "unit")
 effectMap.set("Enrage" , function(ev, lane, player, index){
   if (board.lanes[lane].cards[index][player].Color != "Red" || board.lanes[lane].cards[index][player].CardType != "Hero") return false
@@ -328,6 +336,7 @@ effectMap.set("Restoration Effort" , function(ev, lane){
   let l = board.lanes[lane]
   let player = game.getTurn()
   l.towers[player].currentHealth[0] += 8
+  if (l.towers[player].currentHealth[0] > 40 ) l.towers[player].currentHealth[0] = 40
   l.towers[player].updateDisplay()
   return true
 });
@@ -455,6 +464,21 @@ effectMap.set("Battlefield Control" , function(ev, lane, player, index){
   return false
 });
 
+targetMap.set("Murder Plot" , "unit")
+effectMap.set("Murder Plot" , function(ev, lane, player, index){
+  let l = board.lanes[lane]
+  let card = l.cards[index][player]
+  if (board.lanes[lane].cards[index][player].CardType != "Hero" || board.lanes[lane].cards[index][player].Color != "Black" ) return false
+  doubleTarget(draggedCard, "card", function($lane,$player,$targetCard){
+    card.arrow = $targetCard - index
+    card.currentAttack[3] += 8;
+    card.updateDisplay()
+  }, function($lane,$player,$targetCard){
+    return ( $lane == l && game.players[player] != $player && Math.abs($targetCard - index) <= 1)
+  })
+  return false
+});
+
 targetMap.set("Steal Strength" , "unit")
 effectMap.set("Steal Strength" , function(ev, lane, player, index){
   let l = board.lanes[lane]
@@ -559,13 +583,14 @@ effectMap.set("Mystic Flare" , function(ev, lane, player, index){
   for (var i = 0; i < 12 ; ) {
     for (var j = -1; j <= 1; j++) {
       if(l.cards[index + j] != null && l.cards[index + j][player].Name != null){
-        l.cards[index+j][player].currentHealth[0] -= 2 - sum(l.cards[index+j][player].currentArmor)
+        l.cards[index+j][player].currentHealth[0] -= 2
         i +=2
       }
     }
   }
   for (var j = -1; j <= 1; j++) {
     if(l.cards[index + j] != null && l.cards[index + j][player].Name != null){
+      l.cards[index+j][player].currentHealth[0] += sum(l.cards[index+j][player].currentArmor)
       l.cards[index+j][player].updateDisplay()
     }
   }
@@ -666,7 +691,7 @@ effectMap.set("Gust" , function(ev, lane){
 
 targetMap.set("Winter's Curse", "unit")
 effectMap.set("Winter's Curse", function(ev, lane, player, index) {
-  board.lanes[lane].cards[index][player] .disarmed = true;
+  board.lanes[lane].cards[index][player].disarmed = true;
   game.dispatchEvent("whenAttacking")
   const currentLane = board.lanes[lane]
   for (var i = -1; i <= 1; i+=2) {
@@ -734,19 +759,25 @@ effectMap.set("Town Portal Scroll" , function(ev, lane, player, index){
   return true
 });
 
-// targetMap.set("Pick A Fight" , "unit")
-// effectMap.set("Pick A Fight" , function(ev, lane, player, index){
-//   let l = board.lanes[lane]
-//   let card = l.cards[index][player]
-//   doubleTarget(draggedCard, "card", function($lane,$player,$targetCard){
-//     //ADD TAUNT HERE
-//     card.arrow = $targetCard - index
-//     card.updateDisplay()
-//   }, function($lane,$player,$targetCard){
-//     return ( $lane == l && game.players[player] != $player && Math.abs($targetCard - index) <= 1)
-//   })
-//   return false
-// });
+targetMap.set("Pick a Fight" , "unit")
+effectMap.set("Pick a Fight" , function(ev, lane, player, index){
+  let l = board.lanes[lane]
+  let card = l.cards[index][player]
+  if (l.cards[index][player].CardType != "Hero" || player != game.getTurn()) return false
+  doubleTarget(draggedCard, "card", function($lane,$player,$targetCard){
+    card.arrow = $targetCard - index
+    for (var i = -1; i <= 1; i++) {
+      if (l.cards[index + i] != null && l.cards[index + i][1-player].Name != null){
+        l.cards[index+i][1-player].arrow = -1 * i
+        l.cards[index+i][1-player].updateDisplay()
+      }
+    }
+    card.updateDisplay()
+  }, function($lane,$player,$targetCard){
+    return ( $lane == l && game.players[player] != $player && Math.abs($targetCard - index) <= 1)
+  })
+  return false
+});
 
 
 //"Grazing Shot","No Accident","Slay","Pick Off","Assassinate"

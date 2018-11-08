@@ -93,7 +93,6 @@ const player = (turn, name, heros, deck, computer = false) => {
   return player
 }
 
-
 const game = (() => {
   const div = document.getElementById('game');
   // const bottomPassButton = document.getElementById("pass-btn-bottom");
@@ -385,17 +384,16 @@ function buildLanes(){
   })
 }
 
-const allcards = ["Homefield Advantage","Iron Fog Goldmine","Assured Destruction","Escape Route","Howling Mind","Grand Melee","Assassinate","Echo Slam","Winter's Curse","Battlefield Control","Gust","Act of Defiance","Frostbite","Gank","Duel","Berserker's Call","Prowler Vanguard","Coup de Grace","Mystic Flare","Sow Venom","Barracks","Eclipse","Savage Wolf","Fighting Instinct","Thunderhide Pack","Emissary of the Quorum","New Orders","Ion Shell","Time of Triumph","Forward Charge","Altar of the Mad Moon","New Orders","Sister of the Veil","Rebel Decoy","Steam Cannon","Keenfolk Turret","Assassin's Apprentice","Grazing Shot","No Accident","Slay","Pick Off","Selfish Cleric","Revtel Convoy","Ravenous Mass","Rampaging Hellbear","Satyr Duelist","Savage Wolf","Satyr Magician","Disciple of Nevermore","Legion Standard Bearer","Mercenary Exiles","Verdant Refuge","Mist of Avernus","Ignite","Assault Ladders","Mana Drain","Payday","Arcane Censure","Stars Align","Bellow","Rumusque Blessing","Defensive Bloom","Restoration Effort","Intimidation","Curse of Atrophy","Strafing Run","Lightning Strike","Rolling Storm","Tower Barrage","Foresight","Prey on the Weak","Remote Detonation","Thunderstorm","Bolt of Damocles","Poised to Strike","Defensive Stance","Enrage","God's Strength","Spring the Trap","Double Edge","Conflagration","Call the Reserves", "Better Late Than Never","Iron Branch Protection","Avernus' Blessing","Dimensional Portal","Bronze Legionnaire","Marrowfell Brawler","Ogre Conscript","Troll Soothsayer","Untested Grunt","Thunderhide Alpha"]
-//waiting for art// "Trebuchets","Unsupervised Artillery"
+const allcards = ["Murder Plot","Collateral Damage","Combat Training","Pick a Fight","Trebuchets","Unsupervised Artillery","Homefield Advantage","Iron Fog Goldmine","Assured Destruction","Escape Route","Howling Mind","Grand Melee","Assassinate","Echo Slam","Winter's Curse","Battlefield Control","Gust","Act of Defiance","Frostbite","Gank","Duel","Berserker's Call","Prowler Vanguard","Coup de Grace","Mystic Flare","Sow Venom","Barracks","Eclipse","Savage Wolf","Fighting Instinct","Thunderhide Pack","Emissary of the Quorum","New Orders","Ion Shell","Time of Triumph","Forward Charge","Altar of the Mad Moon","New Orders","Sister of the Veil","Rebel Decoy","Steam Cannon","Keenfolk Turret","Assassin's Apprentice","Grazing Shot","No Accident","Slay","Pick Off","Selfish Cleric","Revtel Convoy","Ravenous Mass","Rampaging Hellbear","Satyr Duelist","Savage Wolf","Satyr Magician","Disciple of Nevermore","Legion Standard Bearer","Mercenary Exiles","Verdant Refuge","Mist of Avernus","Ignite","Assault Ladders","Mana Drain","Payday","Arcane Censure","Stars Align","Bellow","Rumusque Blessing","Defensive Bloom","Restoration Effort","Intimidation","Curse of Atrophy","Strafing Run","Lightning Strike","Rolling Storm","Tower Barrage","Foresight","Prey on the Weak","Remote Detonation","Thunderstorm","Bolt of Damocles","Poised to Strike","Defensive Stance","Enrage","God's Strength","Spring the Trap","Double Edge","Conflagration","Call the Reserves", "Better Late Than Never","Iron Branch Protection","Avernus' Blessing","Dimensional Portal","Bronze Legionnaire","Marrowfell Brawler","Ogre Conscript","Troll Soothsayer","Untested Grunt","Thunderhide Alpha"]
 let deck
-let AIdeck = ["Homefield Advantage","Iron Fog Goldmine","Payday","Assured Destruction","Howling Mind","Assassinate","Echo Slam","Winter's Curse","Gust","Act of Defiance","Frostbite","Berserker's Call","Prowler Vanguard","Coup de Grace","Mystic Flare","Sow Venom","Barracks","Thunderhide Pack","Altar of the Mad Moon","Time of Triumph","Forward Charge","Ion Shell","Sister of the Veil","Rebel Decoy","Assassin's Apprentice","Grazing Shot","No Accident","Slay","Pick Off","Selfish Cleric","Revtel Convoy","Ravenous Mass","Rampaging Hellbear","Satyr Duelist","Savage Wolf","Satyr Magician","Disciple of Nevermore","Legion Standard Bearer","Mercenary Exiles","Verdant Refuge","Mist of Avernus","Ignite","Assault Ladders","Mana Drain","Arcane Censure","Stars Align","Bellow","Rumusque Blessing","Defensive Bloom","Restoration Effort","Intimidation","Curse of Atrophy","Strafing Run","Lightning Strike","Rolling Storm","Tower Barrage","Foresight","Prey on the Weak","Remote Detonation","Thunderstorm","Bolt of Damocles","Poised to Strike","Defensive Stance","Enrage","God's Strength","Spring the Trap","Double Edge","Conflagration","Call the Reserves", "Better Late Than Never","Iron Branch Protection","Avernus' Blessing","Dimensional Portal","Bronze Legionnaire","Marrowfell Brawler","Ogre Conscript","Troll Soothsayer","Untested Grunt","Thunderhide Alpha"]
+let AIdeck = ["Collateral Damage","Combat Training","Trebuchets","Homefield Advantage","Iron Fog Goldmine","Payday","Assured Destruction","Howling Mind","Assassinate","Echo Slam","Winter's Curse","Gust","Act of Defiance","Frostbite","Berserker's Call","Prowler Vanguard","Coup de Grace","Mystic Flare","Sow Venom","Barracks","Thunderhide Pack","Altar of the Mad Moon","Time of Triumph","Forward Charge","Ion Shell","Sister of the Veil","Rebel Decoy","Assassin's Apprentice","Grazing Shot","No Accident","Slay","Pick Off","Selfish Cleric","Revtel Convoy","Ravenous Mass","Rampaging Hellbear","Satyr Duelist","Savage Wolf","Satyr Magician","Disciple of Nevermore","Legion Standard Bearer","Mercenary Exiles","Verdant Refuge","Mist of Avernus","Ignite","Assault Ladders","Mana Drain","Arcane Censure","Stars Align","Bellow","Rumusque Blessing","Defensive Bloom","Restoration Effort","Intimidation","Curse of Atrophy","Strafing Run","Lightning Strike","Rolling Storm","Tower Barrage","Foresight","Prey on the Weak","Remote Detonation","Thunderstorm","Bolt of Damocles","Poised to Strike","Defensive Stance","Enrage","God's Strength","Spring the Trap","Double Edge","Conflagration","Call the Reserves", "Better Late Than Never","Iron Branch Protection","Avernus' Blessing","Dimensional Portal","Bronze Legionnaire","Marrowfell Brawler","Ogre Conscript","Troll Soothsayer","Untested Grunt","Thunderhide Alpha"]
 let AIheros = ["J\'Muy the Wise","Legion Commander","Lycan","Centaur Warrunner","Drow Ranger","Sorla Khan","Phantom Assassin","Bounty Hunter","Venomancer","Prellex","Sven","Luna","Treant Protector","Enchantress","Debbi the Cunning","Keefe the Bold","Fahrvhan the Dreamer","Axe"] // "Beastmaster"
 AIheros = shuffle(AIheros).slice(0,5)
 
 let allheroes = ["Legion Commander","Lycan","Winter Wyvern","Skywrath Mage","Centaur Warrunner","Earthshaker","Omniknight","Drow Ranger","Sorla Khan","Phantom Assassin","Lion","Lich","Bounty Hunter","Venomancer","Prellex","Pugna","Sven","Luna","Treant Protector","Enchantress","Debbi the Cunning","Keefe the Bold","Sniper","Fahrvhan the Dreamer","J\'Muy the Wise","Axe"] // "Beastmaster"
 let heroes
 
-let secretShopDeck = ["Demagicking Maul","Stonehall Plate","Stonehall Cloak","Leather Armor","Short Sword","Traveler's Cloak","Blade of the Vigil","Keenfolk Musket","Red Mist Maul","Shield of Basilius","Horn of the Alpha","Phase Boots","Ring of Tarrasque"]
+let secretShopDeck = ["Rumusque Vestments","Wingfall Hammer","Blink Dagger","Broadsword","Claymore","Chainmail","Fur-lined Mantle","Hero's Cape","Platemail","Barbed Mail","Demagicking Maul","Stonehall Plate","Stonehall Cloak","Leather Armor","Short Sword","Traveler's Cloak","Blade of the Vigil","Keenfolk Musket","Red Mist Maul","Shield of Basilius","Horn of the Alpha","Phase Boots","Ring of Tarrasque"]
 let itemDeck
 
 const startGamebtn = document.getElementById("start-game-btn");
@@ -440,11 +438,27 @@ startGamebtn.addEventListener("click",function(){
   AIdeck = AIdeck.filter(function(card){
     let color =cardData.Cards.find( function(ev){  return ev.Name == card }).Color
     return AIheros.map(function(hero){ return cardData.Cards.find( function(ev){  return ev.Name == hero }).Color}).includes(color)
-   })
+  })
+  heroes = heroTextarea.value.split(",")
+  heroes = heroes.map(function(card){return card.trim()})
+  heroes = heroes.filter(function(card){return allheroes.includes(card)})
+  if (heroes.length < 5) heroes = allheroes
+  localStorage.setItem("heroes", heroes)
+  if (heroes.length > 5) heroes = heroes.slice(0,5)
   deck = deckTextarea.value.split(",")
   deck = deck.map(function(card){return card.trim()})
   deck = deck.filter(function(card){return allcards.includes(card)})
-  if (!deck.length) deck = allcards
+  deck = deck.filter(function(card){
+    let color =cardData.Cards.find( function(ev){  return ev.Name == card }).Color
+    return heroes.map(function(hero){ return cardData.Cards.find( function(ev){  return ev.Name == hero }).Color}).includes(color)
+  })
+  if (!deck.length) {
+    deck = allcards
+    deck = deck.filter(function(card){
+      let color =cardData.Cards.find( function(ev){  return ev.Name == card }).Color
+      return heroes.map(function(hero){ return cardData.Cards.find( function(ev){  return ev.Name == hero }).Color}).includes(color)
+    })
+  }
   localStorage.setItem("deck", deck)
   localStorage.setItem("3of", deck3of.checked)
   if (deck3of.checked) deck = deck.concat(deck,deck) ;
@@ -453,13 +467,7 @@ startGamebtn.addEventListener("click",function(){
   itemDeck = itemDeck.filter(function(card){return secretShopDeck.includes(card)})
   if (itemDeck.length < 9) itemDeck = secretShopDeck
   localStorage.setItem("item", itemDeck)
-  heroes = heroTextarea.value.split(",")
-  heroes = heroes.map(function(card){return card.trim()})
-  heroes = heroes.filter(function(card){return allheroes.includes(card)})
-  //heroes = heroes.filter(function(card){return allheroes.map(function(hero){return hero.toLowerCase()}).includes(card.toLowerCase())})
-  if (heroes.length < 5) heroes = allheroes
-  localStorage.setItem("heroes", heroes)
-  if (heroes.length > 5) heroes = heroes.slice(0,5)
+
   AIdeck = AIdeck.concat(AIdeck,AIdeck)
   startScreen.parentNode.removeChild(startScreen)
   refreshBtn.disabled = false
