@@ -116,7 +116,7 @@ abilityMap.set("Concussive Shot" , function(card,e){
       lane.cards[targetCard+1][player].updateDisplay()
     }
   } , function(lane,player,targetCard){
-    return lane == board.lanes[game.getCurrentLane()]
+    return lane == board.lanes[game.getCurrentLane()] && lane.cards[targetCard][player].CardType == "Hero"
   })
   return false
 });
@@ -336,6 +336,21 @@ abilityMap.set("Headshot" , function(card,e){
   })
   return false
 });
+
+triggerMap.set("Barroom Brawler" , "afterUnitDies")
+abilityMap.set("Barroom Brawler" , function(card, e){
+  let l = board.lanes[game.getCurrentLane()]
+  let player = e.detail.player
+  let index = e.detail.card
+  if (e.detail.player == e.detail.triggerPlayer ||
+     l.cards[e.detail.triggerCard][e.detail.triggerPlayer].CardType != "Hero" ||
+     sum(card.currentHealth) < 0 ||
+     e.detail.card + card.arrow != e.detail.triggerCard ) return false
+  card.currentArmor[1] += 2;
+  card.updateDisplay()
+  return true
+});
+
 
 // game.condemn(l.cards[index][player],board.lanes[lane])
 // game.infoDisplayUpdate();
@@ -707,6 +722,20 @@ abilityMap.set("Thunderhide Pack : Effect" , function(card,e){
   card.updateDisplay()
 });
 
+triggerMap.set("Ogre Corpse Tosser : Effect" , "afterUnitDies")
+abilityMap.set("Ogre Corpse Tosser : Effect" , function(card, e){
+  let l = board.lanes[game.getCurrentLane()]
+  let player = e.detail.player
+  console.log(l.cards[e.detail.triggerCard][e.detail.triggerPlayer].Name )
+  if (e.detail.player != e.detail.triggerPlayer ||
+     l.cards[e.detail.triggerCard][e.detail.triggerPlayer].Name != "Melee Creep" ||
+     sum(card.currentHealth) < 0 ) return false
+  console.log("Tossed")
+  l.towers[1-player].currentHealth[0] -= 2 - (sum(l.towers[1-player].currentArmor) < 0 ? sum(l.towers[1-player].currentArmor) : 0)
+  l.towers[1-player].updateDisplay()
+  return true
+});
+
 triggerMap.set("Emissary of the Quorum : Effect" , "click")
 abilityMap.set("Emissary of the Quorum : Effect" , function(card,e){
   let lane = board.lanes[game.getCurrentLane()]
@@ -747,6 +776,30 @@ abilityMap.set("Prowler Vanguard : Effect" , function(card,e){
       lane.cards[index+i][e.detail.player].updateDisplay()
     }
   }
+});
+
+triggerMap.set("Pit Fighter of Quoidge : Effect" , "afterUnitDies")
+abilityMap.set("Pit Fighter of Quoidge : Effect" , function(card, e){
+  let l = board.lanes[game.getCurrentLane()]
+  let player = e.detail.player
+  let index = e.detail.card
+  console.log("boop");
+  if (e.detail.player != e.detail.triggerPlayer ||
+     sum(card.currentHealth) < 0 ||
+     !(e.detail.card + 1 == e.detail.triggerCard || e.detail.card - 1 == e.detail.triggerCard )) return false
+  card.currentAttack[1] += 2;
+  card.updateDisplay()
+  return true
+});
+
+triggerMap.set("Assassin's Shadow : Effect" , "continuousEffect")
+abilityMap.set("Assassin's Shadow : Effect" , function(card, e){
+  let l = board.lanes[e.detail.lane]
+  // allies = (l.cards.reduce(targetUnitsAvail , [[],[]])[e.detail.player].length - 1) * 2
+  card.siege[4] += 5;
+  card.currentAttack[4] -= (l.cards.reduce(targetUnitsAvail , [[],[]])[e.detail.player].length - 1) * 2;
+  card.updateDisplay()
+  return true
 });
 
 // Items
@@ -973,7 +1026,7 @@ abilityMap.set("Hero's Cape : Effect" , function(card,e){
   $card.updateDisplay()
 });
 
-triggerMap.set("Fur-lined Mantle: Effect" , "continuousEffect")
+triggerMap.set("Fur-lined Mantle : Effect" , "continuousEffect")
 abilityMap.set("Fur-lined Mantle : Effect" , function(card,e){
   let $card = board.lanes[e.detail.lane].cards[e.detail.card][e.detail.player]
   $card.currentHealth[4] += 8
