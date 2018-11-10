@@ -3,10 +3,13 @@
 Продолжить - Done
 Разместить - Deploy
 Выберите линии для всех героев - Need to choose lanes for all Heros
-Uses the 1st 5 heros - Используются первые пять героев (если не выбрал героев)
- If empty all cards will be added to your deck. - Если поле пустое, то все карты добавятся в колоду.
+Uses the 1st 5 heroes - По дефолту используются первые пять героев
+If empty all cards will be added to your deck. - Если поле пустое, то все карты добавятся в колоду.
   
 If card is not vaild or implemented it will be ignored - Если карта не валидная или не реализована, она будет проигнорирована
 
 If empty your heroes will be Legion Commander, Lycan, Winter Wyvern, Skywrath Mage, Centaur Warrunner -
 Если поле пустое, то вашими героями будут Legion Commander, Lycan, Winter Wyvern, Skywrath Mage, Centaur Warrunner
+
+
+If empty all items will be added to your item deck. - Если поле пустое, то все предметы будут добавлены в вашу колоду.
