@@ -13,4 +13,10 @@ If empty your heroes will be Legion Commander, Lycan, Winter Wyvern, Skywrath Ma
 
 
 If empty all items will be added to your item deck. - Если поле пустое, то все предметы будут добавлены в вашу колоду.
-Makes sure everything is updated and you have at least one space to play a creep - Обновите линию, если у вас нет места, куда добавить крипа
+Makes sure everything is updated and you have at least one space to play a creep - 
+Обновите линию, если у вас нет места, куда добавить крипа
+
+Cleave :- Прорубающий урон : 
+Retaliate :- Обратный урон : 
+Siege : - Осада :
+Regeneration :- Регенерация :
