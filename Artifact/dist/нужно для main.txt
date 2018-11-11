@@ -20,3 +20,6 @@ Cleave :- Прорубающий урон :
 Retaliate :- Обратный урон : 
 Siege : - Осада :
 Regeneration :- Регенерация :
+
+Enter Deck Code \nNot all cards impelmented, cards not impelmented will be ignored -
+Введите код колоды \nНе все карты реализованы, нереализованные карты будут проигнорированы
