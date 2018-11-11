@@ -2,7 +2,7 @@
 <html>
   <head>
     <link rel="stylesheet" href="artifact.css">
-    <title>Artifact</title>
+    <title>Artifact Dota Card Game</title>
   </head>
   <body>
     <main id="game">
@@ -13,10 +13,10 @@
       <div class="last-played top UI" id="last-played-top"></div>
 
       <div class="board-nav UI">
-        <button type="button" name="zoomOut" class="btn" id="zoom-btn">Zoom</button>
-        <button type="button" name="zoomLeft" class="btn" id="zoom-btn-left">Left Lane</button>
-        <button type="button" name="zoomMiddle" class="btn" id="zoom-btn-middle">Middle Lane</button>
-        <button type="button" name="zoomRight" class="btn" id="zoom-btn-right">Right Lane</button>
+        <button type="button" name="zoomOut" class="btn" id="zoom-btn">Приблизить/отдалить</button>
+        <button type="button" name="zoomLeft" class="btn" id="zoom-btn-left">Левая линия</button>
+        <button type="button" name="zoomMiddle" class="btn" id="zoom-btn-middle">Мид</button>
+        <button type="button" name="zoomRight" class="btn" id="zoom-btn-right">Правая линия</button>
       </div>
       <div id="info-top" class = "info display-none UI">
         <img src="../node_modules/artifactdb/assets/icon/cardstat-goldcost.png" alt="Gold" align="top">
@@ -28,43 +28,43 @@
         <span class="gold">0</span>
         <span class="name">Name:</span>
       </div>
-      <button class="pass-btn bottom UI active" id="pass-btn-bottom" disabled>Pass</button>
-      <button class="pass-btn top UI" id="pass-btn-top" disabled>Pass</button>
+      <button class="pass-btn bottom UI active" id="pass-btn-bottom" disabled>Пас</button>
+      <button class="pass-btn top UI" id="pass-btn-top" disabled>Пас</button>
 
       <button class="refresh-btn btn UI" id="refresh-btn" disabled>&#x21bb;</button>
 
       <div class="UI" id = "start-screen">
-        <h1>Artifact</h1>
+        <h1>Artifact Dota Card Game</h1>
         <h2>Javascript</h2>
 
-        <button type="button" name="startGame" id='start-game-btn' class="btn UI">Start Game</button>
+        <button type="button" name="startGame" id='start-game-btn' class="btn UI">Начать игру</button>
 
-        <textarea id='deck-textarea' class = 'display-none'  rows="12" cols="70"> Deck </textarea>
-        <textarea id='heroes-textarea' class = 'display-none' rows="12" cols="70"> Heroes </textarea>
-        <textarea id='item-textarea' class = 'display-none' rows="12" cols="70"> Items </textarea>
+        <textarea id='deck-textarea' class = 'display-none'  rows="12" cols="70"> Колода </textarea>
+        <textarea id='heroes-textarea' class = 'display-none' rows="12" cols="70"> Герои </textarea>
+        <textarea id='item-textarea' class = 'display-none' rows="12" cols="70"> Предметы </textarea>
 
         <div id="deck-options" class = 'display-none'>
-          <button type="button" name="resetDeck" id='deck-reset-btn' class="btn">Rest</button>
-          <label class="switch"><input type="checkbox" id='deck-3of'><span class="slider round"> &nbsp;&nbsp;&nbsp;3 of&nbsp;&nbsp;&nbsp; </span></label>
+          <button type="button" name="resetDeck" id='deck-reset-btn' class="btn">Восстановить</button>
+          <label class="switch"><input type="checkbox" id='deck-3of'><span class="slider round"> &nbsp;&nbsp;&nbsp;3 копии&nbsp;&nbsp;&nbsp; </span></label>
         </div>
         <div id="heroes-options" class = 'display-none'>
-          <button type="button" name="resetHeroes" id='heroes-reset-btn' class="btn">Rest</button>
+          <button type="button" name="resetHeroes" id='heroes-reset-btn' class="btn">Восстановить</button>
         </div>
         <div id="item-options" class = 'display-none'>
-          <button type="button" name="resetItemDeck" id='item-reset-btn' class="btn">Rest</button>
+          <button type="button" name="resetItemDeck" id='item-reset-btn' class="btn">Восстановить</button>
         </div>
 
         <div class="game-options">
-          <button type="button" name="editDeck" id='deck-game-btn' class="btn UI">Deck</button>
-          <button type="button" name="editItemDeck" id='item-game-btn' class="btn UI">Items</button>
-          <button type="button" name="editHeroes" id='heroes-game-btn' class="btn UI">Heroes</button>
-          <button type="button" name="import" id='import-game-btn' class="btn UI">Import</button>
+          <button type="button" name="editDeck" id='deck-game-btn' class="btn UI">Колода</button>
+          <button type="button" name="editItemDeck" id='item-game-btn' class="btn UI">Предметы</button>
+          <button type="button" name="editHeroes" id='heroes-game-btn' class="btn UI">Герои</button>
+          <button type="button" name="import" id='import-game-btn' class="btn UI">Импортировать колоду</button>
         </div>
 
         <div class="credit">
-          <a>Bubblebooy</a> /
-          <a href="https://github.com/bubblebooy/Artifact-Javascript">Git Hub</a> /
-          <a href="https://www.reddit.com/r/Artifact/comments/9vwywm/javascript_artifact_now_can_import_decks/">reddit</a>
+          <a>Разработчик: Bubblebooy</a> /
+          <a href="https://github.com/bubblebooy/Artifact-Javascript">Перейти на Git Hub</a> /
+          <a href="https://www.reddit.com/r/Artifact/comments/9vwywm/javascript_artifact_now_can_import_decks/">Перейти на reddit</a>
         </div>
         <div class="background">
           <div class="circle" style="padding: 50%; bottom: -5%;right: -20%"></div>
