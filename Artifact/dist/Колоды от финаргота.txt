@@ -1,0 +1,45 @@
+КОЛОДА 1 (КРАСНО ЗЕЛЕНАЯ)
+
+►Герои: Legion Commander, Lycan ,Drow Ranger, Treant Protector, Axe
+
+►Предметы: Demagicking Maul, Demagicking Maul, Demagicking Maul, Stonehall Cloak, Stonehall Cloak, Stonehall Cloak, Blink Dagger,
+Blink Dagger, Blink Dagger
+
+►Карты: Stars Align, Stars Align, Stars Align, Duel, Duel, Duel, Gust, Gust, Gust, Savage Wolf, Savage Wolf, Savage Wolf, 
+Berserker's Call, Berserker's Call, Berserker's Call, Spring the Trap, Time of Triumph, Time of Triumph, Time of Triumph, 
+Emissary of the Quorum, Emissary of the Quorum, Emissary of the Quorum, Mist of Avernus, Mist of Avernus, Mist of Avernus, 
+Combat Training, Combat Training, Combat Training, Rampaging Hellbear, Rampaging Hellbear, Altar of the Mad Moon, 
+Altar of the Mad Moon, Altar of the Mad Moon, Grand Melee, Grand Melee, Grand Melee, Defensive Bloom
+
+Код колоды: ADCFSs+uAKGDFgNsLsCUbgBgYibgYS6AqIBDSYCiA__
+
+
+КОЛОДА 2 (КРАСНО ЧЕРНАЯ)
+
+►Герои: Bristleback, Phantom Assassin, Lion, Sniper, Axe
+
+►Предметы: Stonehall Cloak, Stonehall Cloak, Stonehall Cloak, Horn of the Alpha, Horn of the Alpha, Horn of the Alpha, Blink Dagger, 
+Blink Dagger, Blink Dagger
+
+►Карты: Grazing Shot, Poised to Strike, Combat Training, Combat Training, Combat Training, Payday, Payday, Payday, Slay, Slay, 
+Slay, Viscous Nasal Goo, Viscous Nasal Goo, Viscous Nasal Goo, Gank, Pick Off, Pick Off, Pick Off, Berserker's Call,
+Berserker's Call, Berserker's Call, Coup de Grace, Coup de Grace, Coup de Grace, Assassinate, Assassinate, Assassinate,
+Time of Triumph, Assassin's Apprentice, Iron Fog Goldmine, Mana Drain, Mana Drain, Mana Drain
+
+Код колоды: ADCFWKkuQIKEUMKMbwCJAGoAYG2AQqeDYkGmrgBDw__
+
+
+КОЛОДА 3 (КРАСНО ЧЕРНАЯ)
+
+►Герои: Axe, Phantom Assassin, Legion Commander, Sorla Khan, Sniper
+
+►Предметы: Demagicking Maul, Demagicking Maul, Demagicking Maul, Traveler's Cloak, Traveler's Cloak, Traveler's Cloak, 
+Blink Dagger, Blink Dagger, Blink Dagger
+
+►Карты: Duel, Duel, Duel, Combat Training, Slay, Collateral Damage, Collateral Damage, Collateral Damage,Gank,Gank,Gank,
+Pick Off, Pick Off, Pick Off,Payday, Berserker's Call, Berserker's Call, Berserker's Call, Coup de Grace, Coup de Grace, 
+Coup de Grace, Assassinate, Assassinate, Assassinate, Assault Ladders, Assault Ladders, Assault Ladders, Bronze Legionnaire, 
+Bronze Legionnaire, Bronze Legionnaire, Disciple of Nevermore, Disciple of Nevermore, Ogre Corpse Tosser, Ogre Corpse Tosser, 
+Assured Destruction, Assured Destruction, Assured Destruction
+
+Код колоды: ADCFQAkuQIbg0gLuF1u3QFRgaUBoQKEOgIWhpo4AYU_
