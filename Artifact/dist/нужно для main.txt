@@ -1,7 +1,7 @@
 Силы света - Radiant
 Силы тьмы - Dire
 Продолжить - Done
-Разместить - Deploy
+"Разместить" - "Deploy"
 Выберите линии для всех героев - Need to choose lanes for all Heros
 Uses the 1st 5 heroes - По дефолту используются первые пять героев
 If empty all cards will be added to your deck. - Если поле пустое, то все карты добавятся в колоду.
@@ -21,7 +21,11 @@ Retaliate :- Обратный урон :
 Siege :- Осада :
 Regeneration :- Регенерация :
 
-Enter Deck Code \nNot all cards impelmented, cards not impelmented will be ignored -
+
+Cleave : ${i(e.cleave)}\nRetaliate : ${i(e.retaliate)}\nSiege : ${i(e.siege)}\nRegeneration : -
+Прорубающий урон : ${i(e.cleave)}\nОбратный урон : ${i(e.retaliate)}\nОсада : ${i(e.siege)}\nРегенерация : -
+
+Enter Deck Code \nNot all cards impelmented, cards not impelmented will be ignored-
 Введите код колоды \nНе все карты реализованы, нереализованные карты будут проигнорированы
 
 
