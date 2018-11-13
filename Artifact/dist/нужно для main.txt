@@ -23,3 +23,7 @@ Regeneration :- Регенерация :
 
 Enter Deck Code \nNot all cards impelmented, cards not impelmented will be ignored -
 Введите код колоды \nНе все карты реализованы, нереализованные карты будут проигнорированы
+
+
+Modify a black hero with "Deal 2 piercing damage to this hero\'s enemy neighbors before the action phase."-
+Улучшает черного героя. Перед фазой действия он наносит 2 ед. пронзающего урона соседним врагам.
