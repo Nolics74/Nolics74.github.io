@@ -16,9 +16,9 @@ If empty all items will be added to your item deck. - Если поле пуст
 Makes sure everything is updated and you have at least one space to play a creep - 
 Обновите линию, если у вас нет места, куда добавить крипа
 
-Cleave :- Прорубающий урон : 
-Retaliate :- Обратный урон : 
-Siege : - Осада :
+Cleave :- Прорубающий урон :
+Retaliate :- Обратный урон :
+Siege :- Осада :
 Regeneration :- Регенерация :
 
 Enter Deck Code \nNot all cards impelmented, cards not impelmented will be ignored -
